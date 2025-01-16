@@ -2,11 +2,21 @@ public class Luna {
     public static final String NAME = "Luna";
 
     public static void main(String[] args) {
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
+        greet();
+    }
+
+    /**
+     * Initial greeting
+     */
+    public static void greet() {
+        String header = """
+                ____________________________________________________________
+                Hello! I'm %s
+                What can I do for you?
+                ____________________________________________________________
+                Bye. Hope to see you again soon!
+                ____________________________________________________________""";
+
+        System.out.printf(header, NAME);
     }
 }
