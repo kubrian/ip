@@ -1,11 +1,19 @@
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Luna {
+    // Common strings
     public static final String NAME = "Luna";
-    public static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?\n";
-    public static final String BYE = "Bye. Hope to see you again soon!\n";
+    public static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
+    public static final String BYE = "Bye. Hope to see you again soon!";
+
+    // I/O
     public static final Scanner scanner = new Scanner(System.in);
 
+    // Data
+    public static ArrayList<String> list = new ArrayList<>();
 
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
@@ -15,17 +23,23 @@ public class Luna {
         scanner.close();
     }
 
-    /**
-     * Formats the chatbot response such that it can be printed to the console.
-     * <p>
-     * Appends the name of the program to the beginning of the response
-     *
-     * @param response The response from the chatbot
-     */
-    public static String formatResponse(String response) {
-        return String.format("%s: %s\n", NAME, response);
-    }
 
+    /**
+     * Format the current list of items as a string.
+     * <p>
+     * Each item is numbered and the string is newline-separated.
+     * <p>
+     * Example output:
+     * <pre>
+     * 1: item1
+     * 2: item2
+     * </pre>
+     */
+    public static String formatList() {
+        return IntStream.range(0, list.size())
+                        .mapToObj(i -> i + 1 + ": " + list.get(i))
+                        .collect(Collectors.joining("\n"));
+    }
 
     /**
      * Reads input from the user and prints out a response until the user
@@ -42,9 +56,12 @@ public class Luna {
             // Check if the user wants to exit
             if (input.equals("bye")) {
                 break;
+            } else if (input.equals("list")) {
+                System.out.println(formatList());
+            } else {
+                list.add(input);
+                System.out.println("added: " + input);
             }
-
-            System.out.println(formatResponse(input));
         }
     }
 }

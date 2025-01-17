@@ -1,7 +1,7 @@
 Hello! I'm Luna!
 What can I do for you?
-
-> Luna: hello
-
+> added: read book
+> added: do work
+> 1: read book
+2: do work
 > Bye. Hope to see you again soon!
-

@@ -1,2 +1,4 @@
-hello
+read book
+do work
+list
 bye
