@@ -25,6 +25,51 @@ public class Luna {
 
 
     /**
+     * Reads input from the user and prints out a response until the user
+     * enters "bye".
+     * <p>
+     * The response is simply the input given by the user.
+     */
+    public static void interact() {
+        while (true) {
+            // Read input
+            System.out.print("> ");
+            String input = scanner.nextLine();
+
+            // Check if the user wants to exit
+            if (input.equals("bye")) {
+                break;
+            } else if (input.equals("list")) {
+                // Print the current list
+                System.out.println(formatList());
+            } else if (input.startsWith("mark")) {
+                // Mark a task as completed
+                try {
+                    int index = getIndex(input);
+                    taskList.get(index - 1)
+                            .markAsCompleted();
+                    System.out.println("Marked task " + index + " as completed");
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    System.out.println("Invalid index");
+                }
+            } else if (input.startsWith("unmark")) {
+                // Mark a task as completed
+                try {
+                    int index = getIndex(input);
+                    taskList.get(index - 1)
+                            .markAsNotCompleted();
+                    System.out.println("Marked task " + index + " as not completed");
+                } catch (IndexOutOfBoundsException | NumberFormatException e) {
+                    System.out.println("Invalid index");
+                }
+            } else {
+                taskList.add(new Task(input));
+                System.out.println("added: " + input);
+            }
+        }
+    }
+
+    /**
      * Format the current list of items as a string.
      * <p>
      * Each item is numbered and the string is newline-separated.
@@ -41,27 +86,7 @@ public class Luna {
                         .collect(Collectors.joining("\n"));
     }
 
-    /**
-     * Reads input from the user and prints out a response until the user
-     * enters "bye".
-     * <p>
-     * The response is simply the input given by the user.
-     */
-    public static void interact() {
-        while (true) {
-            // Read input
-            System.out.print("> ");
-            String input = scanner.nextLine();
-
-            // Check if the user wants to exit
-            if (input.equals("bye")) {
-                break;
-            } else if (input.equals("list")) {
-                System.out.println(formatList());
-            } else {
-                taskList.add(new Task(input));
-                System.out.println("added: " + input);
-            }
-        }
+    public static int getIndex(String input) {
+        return Integer.parseInt(input.split(" ")[1]);
     }
 }
