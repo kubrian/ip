@@ -13,7 +13,7 @@ public class Luna {
     public static final Scanner scanner = new Scanner(System.in);
 
     // Data
-    public static ArrayList<String> list = new ArrayList<>();
+    public static ArrayList<Task> taskList = new ArrayList<>();
 
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
@@ -36,8 +36,8 @@ public class Luna {
      * </pre>
      */
     public static String formatList() {
-        return IntStream.range(0, list.size())
-                        .mapToObj(i -> i + 1 + ": " + list.get(i))
+        return IntStream.range(0, taskList.size())
+                        .mapToObj(i -> i + 1 + ": " + taskList.get(i))
                         .collect(Collectors.joining("\n"));
     }
 
@@ -59,7 +59,7 @@ public class Luna {
             } else if (input.equals("list")) {
                 System.out.println(formatList());
             } else {
-                list.add(input);
+                taskList.add(new Task(input));
                 System.out.println("added: " + input);
             }
         }
