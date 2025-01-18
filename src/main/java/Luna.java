@@ -18,7 +18,9 @@ public class Luna {
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
         System.out.println(GREETING);
-        interact();
+        while (interact()) {
+
+        }
         System.out.println(BYE);
         scanner.close();
     }
@@ -30,54 +32,53 @@ public class Luna {
      * <p>
      * The response is simply the input given by the user.
      */
-    public static void interact() {
-        while (true) {
-            // Read input
-            System.out.print("> ");
-            String input = scanner.nextLine();
-            String words[] = input.split(" ", 2);
+    public static boolean interact() {
+        // Read input
+        System.out.print("> ");
+        String input = scanner.nextLine();
+        String words[] = input.split(" ", 2);
 
-            // Check if the user wants to exit
-            switch (words[0]) {
-            case "bye":
-                return;
-            case "list":
-                System.out.println(formatList());
-                break;
-            case "mark":
-                int taskNumber = Integer.parseInt(words[1]);
-                taskList.get(taskNumber - 1)
-                        .markAsCompleted();
-                System.out.println("marked task " + taskNumber + " as completed");
-                break;
-            case "unmark":
-                taskNumber = Integer.parseInt(words[1]);
-                taskList.get(taskNumber - 1)
-                        .markAsNotCompleted();
-                System.out.println("marked task " + taskNumber + " as not completed");
-                break;
-            case "todo":
-                Task task = new ToDo(words[1]);
-                taskList.add(task);
-                System.out.println("added new todo:\n" + task);
-                break;
-            case "deadline":
-                String[] parts = words[1].split(" /by ", 2);
-                task = new Deadline(parts[0], parts[1]);
-                taskList.add(task);
-                System.out.println("added new deadline:\n" + task);
-                break;
-            case "event":
-                parts = words[1].split(" /(from|to) ", 3);
-                task = new Event(parts[0], parts[1], parts[2]);
-                taskList.add(task);
-                System.out.println("added new event:\n" + task);
-                break;
-            default:
-                System.out.println("Unsupported command: " + words[0]);
-                break;
-            }
+        // Check if the user wants to exit
+        switch (words[0]) {
+        case "bye":
+            return false;
+        case "list":
+            System.out.println(formatList());
+            break;
+        case "mark":
+            int taskNumber = Integer.parseInt(words[1]);
+            taskList.get(taskNumber - 1)
+                    .markAsCompleted();
+            System.out.println("Marked task " + taskNumber + " as completed");
+            break;
+        case "unmark":
+            taskNumber = Integer.parseInt(words[1]);
+            taskList.get(taskNumber - 1)
+                    .markAsNotCompleted();
+            System.out.println("Marked task " + taskNumber + " as not completed");
+            break;
+        case "todo":
+            Task task = new ToDo(words[1]);
+            taskList.add(task);
+            System.out.println("Added new todo:\n" + task);
+            break;
+        case "deadline":
+            String[] parts = words[1].split(" /by ", 2);
+            task = new Deadline(parts[0], parts[1]);
+            taskList.add(task);
+            System.out.println("Added new deadline:\n" + task);
+            break;
+        case "event":
+            parts = words[1].split(" /(from|to) ", 3);
+            task = new Event(parts[0], parts[1], parts[2]);
+            taskList.add(task);
+            System.out.println("Added new event:\n" + task);
+            break;
+        default:
+            System.out.println("Unsupported command: " + words[0]);
+            break;
         }
+        return true;
     }
 
     /**
