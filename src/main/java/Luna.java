@@ -35,34 +35,28 @@ public class Luna {
             // Read input
             System.out.print("> ");
             String input = scanner.nextLine();
+            String words[] = input.split(" ");
 
             // Check if the user wants to exit
-            if (input.equals("bye")) {
-                break;
-            } else if (input.equals("list")) {
-                // Print the current list
+            switch (words[0]) {
+            case "bye":
+                return;
+            case "list":
                 System.out.println(formatList());
-            } else if (input.startsWith("mark")) {
-                // Mark a task as completed
-                try {
-                    int index = getIndex(input);
-                    taskList.get(index - 1)
-                            .markAsCompleted();
-                    System.out.println("Marked task " + index + " as completed");
-                } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                    System.out.println("Invalid index");
-                }
-            } else if (input.startsWith("unmark")) {
-                // Mark a task as completed
-                try {
-                    int index = getIndex(input);
-                    taskList.get(index - 1)
-                            .markAsNotCompleted();
-                    System.out.println("Marked task " + index + " as not completed");
-                } catch (IndexOutOfBoundsException | NumberFormatException e) {
-                    System.out.println("Invalid index");
-                }
-            } else {
+                break;
+            case "mark":
+                int taskNumber = Integer.parseInt(words[1]);
+                taskList.get(taskNumber - 1)
+                        .markAsCompleted();
+                System.out.println("Marked task " + taskNumber + " as completed");
+                break;
+            case "unmark":
+                taskNumber = Integer.parseInt(words[1]);
+                taskList.get(taskNumber - 1)
+                        .markAsNotCompleted();
+                System.out.println("Marked task " + taskNumber + " as not completed");
+                break;
+            default:
                 taskList.add(new Task(input));
                 System.out.println("added: " + input);
             }
@@ -84,9 +78,5 @@ public class Luna {
         return IntStream.range(0, taskList.size())
                         .mapToObj(i -> i + 1 + ": " + taskList.get(i))
                         .collect(Collectors.joining("\n"));
-    }
-
-    public static int getIndex(String input) {
-        return Integer.parseInt(input.split(" ")[1]);
     }
 }

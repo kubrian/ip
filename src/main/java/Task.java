@@ -2,7 +2,7 @@ public class Task {
     private final String description;
     private boolean completed;
 
-    Task(String description) {
+    public Task(String description) {
         this.description = description;
         markAsNotCompleted();
     }
