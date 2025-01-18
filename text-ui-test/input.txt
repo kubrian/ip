@@ -1,4 +1,5 @@
-read book
-do work
+todo eat
+deadline sleep /by tonight
+event cry /from now /to dinner
 list
 bye

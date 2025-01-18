@@ -35,7 +35,7 @@ public class Luna {
             // Read input
             System.out.print("> ");
             String input = scanner.nextLine();
-            String words[] = input.split(" ");
+            String words[] = input.split(" ", 2);
 
             // Check if the user wants to exit
             switch (words[0]) {
@@ -48,17 +48,34 @@ public class Luna {
                 int taskNumber = Integer.parseInt(words[1]);
                 taskList.get(taskNumber - 1)
                         .markAsCompleted();
-                System.out.println("Marked task " + taskNumber + " as completed");
+                System.out.println("marked task " + taskNumber + " as completed");
                 break;
             case "unmark":
                 taskNumber = Integer.parseInt(words[1]);
                 taskList.get(taskNumber - 1)
                         .markAsNotCompleted();
-                System.out.println("Marked task " + taskNumber + " as not completed");
+                System.out.println("marked task " + taskNumber + " as not completed");
+                break;
+            case "todo":
+                Task task = new ToDo(words[1]);
+                taskList.add(task);
+                System.out.println("added new todo:\n" + task);
+                break;
+            case "deadline":
+                String[] parts = words[1].split(" /by ", 2);
+                task = new Deadline(parts[0], parts[1]);
+                taskList.add(task);
+                System.out.println("added new deadline:\n" + task);
+                break;
+            case "event":
+                parts = words[1].split(" /(from|to) ", 3);
+                task = new Event(parts[0], parts[1], parts[2]);
+                taskList.add(task);
+                System.out.println("added new event:\n" + task);
                 break;
             default:
-                taskList.add(new Task(input));
-                System.out.println("added: " + input);
+                System.out.println("Unsupported command: " + words[0]);
+                break;
             }
         }
     }

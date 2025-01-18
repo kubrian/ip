@@ -1,4 +1,7 @@
-public class Task {
+/**
+ * Represents a single task.
+ */
+public abstract class Task {
     private final String description;
     private boolean completed;
 

@@ -1,7 +1,12 @@
 Hello! I'm Luna!
 What can I do for you?
-> added: read book
-> added: do work
-> 1: [ ] read book
-2: [ ] do work
+> added new todo:
+[T][ ] eat
+> added new deadline:
+[D][ ] sleep (by: tonight)
+> added new event:
+[E][ ] cry (from: now to: dinner)
+> 1: [T][ ] eat
+2: [D][ ] sleep (by: tonight)
+3: [E][ ] cry (from: now to: dinner)
 > Bye. Hope to see you again soon!
