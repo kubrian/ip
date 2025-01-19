@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Luna {
@@ -19,60 +18,72 @@ public class Luna {
         // Greet the user, interact until the user says bye
         System.out.println(GREETING);
         while (interact()) {
-
         }
-        System.out.println(BYE);
-        scanner.close();
     }
 
 
     /**
-     * Reads input from the user and prints out a response until the user
-     * enters "bye".
+     * Interacts with the user and returns whether the user wants to continue.
      * <p>
-     * The response is simply the input given by the user.
+     * Returns false if the user says bye, true otherwise.
      */
     public static boolean interact() {
         // Read input
         System.out.print("> ");
         String input = scanner.nextLine();
-        String words[] = input.split(" ", 2);
 
-        // Check if the user wants to exit
-        switch (words[0]) {
-        case "bye":
+        // Simple commands
+        if (input.equals("bye")) {
+            System.out.println(BYE);
+            scanner.close();
             return false;
-        case "list":
-            System.out.println(formatList());
-            break;
+        } else if (input.equals("list")) {
+            printTaskList();
+            return true;
+        }
+
+        // Complex commands
+        String words[] = input.split(" ", 2);
+        if (words.length != 2) {
+            System.out.println("Incomplete command: " + input);
+            return true;
+        }
+
+        switch (words[0]) {
         case "mark":
-            int taskNumber = Integer.parseInt(words[1]);
-            taskList.get(taskNumber - 1)
-                    .markAsCompleted();
-            System.out.println("Marked task " + taskNumber + " as completed");
+            try {
+                markAsCompleted(words[1]);
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                System.out.println("Invalid task number: " + words[1]);
+            }
             break;
         case "unmark":
-            taskNumber = Integer.parseInt(words[1]);
-            taskList.get(taskNumber - 1)
-                    .markAsNotCompleted();
-            System.out.println("Marked task " + taskNumber + " as not completed");
+            try {
+                markAsNotCompleted(words[1]);
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                System.out.println("Invalid task number: " + words[1]);
+            }
             break;
         case "todo":
-            Task task = new ToDo(words[1]);
-            taskList.add(task);
-            System.out.println("Added new todo:\n" + task);
+            try {
+                addToDo(words[1]);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
             break;
         case "deadline":
-            String[] parts = words[1].split(" /by ", 2);
-            task = new Deadline(parts[0], parts[1]);
-            taskList.add(task);
-            System.out.println("Added new deadline:\n" + task);
+            try {
+                addDeadline(words[1]);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
             break;
         case "event":
-            parts = words[1].split(" /(from|to) ", 3);
-            task = new Event(parts[0], parts[1], parts[2]);
-            taskList.add(task);
-            System.out.println("Added new event:\n" + task);
+            try {
+                addEvent(words[1]);
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
             break;
         default:
             System.out.println("Unsupported command: " + words[0]);
@@ -82,7 +93,7 @@ public class Luna {
     }
 
     /**
-     * Format the current list of items as a string.
+     * Prints the current list of tasks.
      * <p>
      * Each item is numbered and the string is newline-separated.
      * <p>
@@ -92,9 +103,71 @@ public class Luna {
      * 2: item2
      * </pre>
      */
-    public static String formatList() {
-        return IntStream.range(0, taskList.size())
-                        .mapToObj(i -> i + 1 + ": " + taskList.get(i))
-                        .collect(Collectors.joining("\n"));
+    public static void printTaskList() {
+        IntStream.range(0, taskList.size())
+                 .mapToObj(i -> i + 1 + ": " + taskList.get(i))
+                 .forEach(System.out::println);
     }
+
+    /**
+     * Marks the task specified by the user as completed.
+     */
+    public static void markAsCompleted(String input) {
+        int taskNumber = Integer.parseInt(input);
+        taskList.get(taskNumber - 1)
+                .markAsCompleted();
+        System.out.println("Marked task " + taskNumber + " as completed");
+    }
+
+    /**
+     * Marks the task specified by the user as not completed.
+     */
+    public static void markAsNotCompleted(String input) {
+        int taskNumber = Integer.parseInt(input);
+        taskList.get(taskNumber - 1)
+                .markAsNotCompleted();
+        System.out.println("Marked task " + taskNumber + " as not completed");
+    }
+
+    /**
+     * Adds a new todo task.
+     *
+     * @throws IllegalArgumentException if input is empty
+     */
+    public static void addToDo(String input) throws IllegalArgumentException {
+        Task task = new ToDo(input);
+        taskList.add(task);
+        System.out.println("Added new todo:\n" + task);
+    }
+
+    /**
+     * Adds a new deadline task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    public static void addDeadline(String input) {
+        String[] comp = input.split(" /by ", 2);
+        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
+        }
+        Task task = new Deadline(comp[0], comp[1]);
+        taskList.add(task);
+        System.out.println("Added new deadline:\n" + task);
+    }
+
+    /**
+     * Adds a new event task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    public static void addEvent(String input) {
+        String[] comp = input.split(" /(from|to) ", 3);
+        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
+        }
+        Task task = new Event(comp[0], comp[1], comp[2]);
+        taskList.add(task);
+        System.out.println("Added new event:\n" + task);
+    }
+
 }

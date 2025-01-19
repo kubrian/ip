@@ -2,4 +2,9 @@ todo eat
 deadline sleep /by tonight
 event cry /from now /to dinner
 list
+todo
+deadline
+event
+deadline no by
+event no from to
 bye
