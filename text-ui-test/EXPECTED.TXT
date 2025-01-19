@@ -9,13 +9,15 @@ What can I do for you?
 > 1: [T][ ] eat
 2: [D][ ] sleep (by: tonight)
 3: [E][ ] cry (from: now to: dinner)
-> Incomplete command: todo
-> Incomplete command: deadline
-> Incomplete command: event
+Incomplete command: Type 'help' for a list of commands.
+> Incomplete command: Type 'help' for a list of commands.
+> Incomplete command: Type 'help' for a list of commands.
+> Incomplete command: Type 'help' for a list of commands.
 > Invalid task format
 > Invalid task format
 > Deleted task 1:
 [T][ ] eat
 > 1: [D][ ] sleep (by: tonight)
 2: [E][ ] cry (from: now to: dinner)
+Incomplete command: Type 'help' for a list of commands.
 > Bye. Hope to see you again soon!

@@ -7,6 +7,10 @@ public class Luna {
     public static final String NAME = "Luna";
     public static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
     public static final String BYE = "Bye. Hope to see you again soon!";
+    public static final String UNSUPPORTED = "Unsupported command: Type 'help' for a list of " +
+            "commands.";
+    public static final String INCOMPLETE = "Incomplete command: Type 'help' for a list of " +
+            "commands.";
 
     // I/O
     public static final Scanner scanner = new Scanner(System.in);
@@ -31,69 +35,84 @@ public class Luna {
         // Read input
         System.out.print("> ");
         String input = scanner.nextLine();
+        String words[] = input.split(" ", 2);
+
+        // Ensure valid command
+        Command command;
+        try {
+            command = Command.valueOf(words[0].toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println(UNSUPPORTED);
+            return true;
+        }
+
+        // Check simple commands have no further inputs
+        if ((command == Command.BYE || command == Command.LIST || command == Command.HELP) && words.length != 1) {
+            System.out.println(UNSUPPORTED);
+            return true;
+        }
 
         // Simple commands
-        if (input.equals("bye")) {
+        switch (command) {
+        case BYE:
             System.out.println(BYE);
-            scanner.close();
             return false;
-        } else if (input.equals("list")) {
+        case LIST:
             printTaskList();
-            return true;
+            break;
+        case HELP:
+            System.out.println(Command.helpString());
+            break;
         }
 
-        // Complex commands
-        String words[] = input.split(" ", 2);
+        // Check complex commands have arugments
         if (words.length != 2) {
-            System.out.println("Incomplete command: " + input);
+            System.out.println(INCOMPLETE);
             return true;
         }
 
-        switch (words[0]) {
-        case "mark":
+        switch (command) {
+        case MARK:
             try {
                 markAsCompleted(words[1]);
             } catch (NumberFormatException | IndexOutOfBoundsException e) {
                 System.out.println("Invalid task number: " + words[1]);
             }
             break;
-        case "unmark":
+        case UNMARK:
             try {
                 markAsNotCompleted(words[1]);
             } catch (NumberFormatException | IndexOutOfBoundsException e) {
                 System.out.println("Invalid task number: " + words[1]);
             }
             break;
-        case "todo":
+        case TODO:
             try {
                 addToDo(words[1]);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
             break;
-        case "deadline":
+        case DEADLINE:
             try {
                 addDeadline(words[1]);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
             break;
-        case "event":
+        case EVENT:
             try {
                 addEvent(words[1]);
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
             break;
-        case "delete":
+        case DELETE:
             try {
                 deleteTask(words[1]);
             } catch (NumberFormatException | IndexOutOfBoundsException e) {
                 System.out.println("Invalid task number: " + words[1]);
             }
-            break;
-        default:
-            System.out.println("Unsupported command: " + words[0]);
             break;
         }
         return true;
