@@ -85,6 +85,13 @@ public class Luna {
                 System.out.println(e.getMessage());
             }
             break;
+        case "delete":
+            try {
+                deleteTask(words[1]);
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                System.out.println("Invalid task number: " + words[1]);
+            }
+            break;
         default:
             System.out.println("Unsupported command: " + words[0]);
             break;
@@ -168,6 +175,15 @@ public class Luna {
         Task task = new Event(comp[0], comp[1], comp[2]);
         taskList.add(task);
         System.out.println("Added new event:\n" + task);
+    }
+
+    /**
+     * Deletes the task specified by the user.
+     */
+    public static void deleteTask(String input) {
+        int taskNumber = Integer.parseInt(input);
+        Task task = taskList.remove(taskNumber - 1);
+        System.out.println("Deleted task " + taskNumber + ":\n" + task);
     }
 
 }

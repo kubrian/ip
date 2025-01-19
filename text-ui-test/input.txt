@@ -7,4 +7,6 @@ deadline
 event
 deadline no by
 event no from to
+delete 1
+list
 bye

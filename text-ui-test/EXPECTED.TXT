@@ -14,4 +14,8 @@ What can I do for you?
 > Incomplete command: event
 > Invalid task format
 > Invalid task format
+> Deleted task 1:
+[T][ ] eat
+> 1: [D][ ] sleep (by: tonight)
+2: [E][ ] cry (from: now to: dinner)
 > Bye. Hope to see you again soon!
