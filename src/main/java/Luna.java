@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -12,6 +13,8 @@ public class Luna {
 
     // I/O
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String saveFileName = "./data/_" + NAME.toLowerCase();
+    private static File saveFile = new File(saveFileName);
 
     // Data
     private static ArrayList<Task> taskList = new ArrayList<>();
@@ -19,10 +22,14 @@ public class Luna {
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
         System.out.println(GREETING);
+        try {
+            loadTasksFromFile();
+        } catch (IOException e) {
+            System.out.println("Unable to load tasks from file.");
+        }
         while (interact()) {
         }
     }
-
 
     /**
      * Interacts with the user and returns whether the user wants to continue.
@@ -57,10 +64,10 @@ public class Luna {
             return false;
         case LIST:
             printTaskList();
-            break;
+            return true;
         case HELP:
             System.out.println(Command.helpString());
-            break;
+            return true;
         }
 
         // Check complex commands have arugments
@@ -112,6 +119,11 @@ public class Luna {
                 System.out.println("Invalid task number: " + words[1]);
             }
             break;
+        }
+        try {
+            saveTasksToFile();
+        } catch (FileNotFoundException e) {
+            System.out.println("Failed to save tasks to file");
         }
         return true;
     }
@@ -203,4 +215,53 @@ public class Luna {
         System.out.println("Deleted task " + taskNumber + ":\n" + task);
     }
 
+    /**
+     * Saves the current list of tasks to a file.
+     * <p>
+     * The file format is newline-separated, each line consisting of completion status and task
+     * description.
+     */
+    private static void saveTasksToFile() throws FileNotFoundException {
+        // Ensure directory exists
+        File dir = saveFile.getParentFile();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // Write to file
+        PrintWriter pw = new PrintWriter(saveFile);
+        for (Task task : taskList) {
+            pw.println((task.isCompleted() ? 1 : 0) + " " + task.getCommandString());
+        }
+        pw.close();
+    }
+
+    private static void loadTasksFromFile() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(saveFile));
+        String line;
+        System.out.println("Adding tasks from file...");
+        while ((line = br.readLine()) != null) {
+            String[] comp = line.split(" ", 3);
+
+            // Task type
+            String type = comp[1];
+            String input = comp[2];
+            if (type.equals("todo")) {
+                addToDo(input);
+            } else if (type.equals("deadline")) {
+                addDeadline(input);
+            } else if (type.equals("event")) {
+                addEvent(input);
+            }
+
+            // Completion
+            boolean completed = Integer.parseInt(comp[0]) != 0;
+            if (completed) {
+                taskList.get(taskList.size() - 1)
+                        .markAsCompleted();
+            }
+        }
+        br.close();
+        System.out.println("Loaded tasks! 'list' to view all.");
+    }
 }

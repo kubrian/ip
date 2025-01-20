@@ -9,6 +9,13 @@ public class Event extends Task {
         this.to = to;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public String getCommandString() {
+        return "event " + getDescription() + " /from " + from + " /to " + to;
+    }
+
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
