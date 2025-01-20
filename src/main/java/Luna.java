@@ -4,19 +4,17 @@ import java.util.stream.IntStream;
 
 public class Luna {
     // Common strings
-    public static final String NAME = "Luna";
-    public static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
-    public static final String BYE = "Bye. Hope to see you again soon!";
-    public static final String UNSUPPORTED = "Unsupported command: Type 'help' for a list of " +
-            "commands.";
-    public static final String INCOMPLETE = "Incomplete command: Type 'help' for a list of " +
-            "commands.";
+    private static final String NAME = "Luna";
+    private static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
+    private static final String BYE = "Bye. Hope to see you again soon!";
+    private static final String UNSUPPORTED = "Unsupported command: 'help' to list commands.";
+    private static final String INCOMPLETE = "Incomplete command: 'help' to list commands.";
 
     // I/O
-    public static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
     // Data
-    public static ArrayList<Task> taskList = new ArrayList<>();
+    private static ArrayList<Task> taskList = new ArrayList<>();
 
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
@@ -31,7 +29,7 @@ public class Luna {
      * <p>
      * Returns false if the user says bye, true otherwise.
      */
-    public static boolean interact() {
+    private static boolean interact() {
         // Read input
         System.out.print("> ");
         String input = scanner.nextLine();
@@ -129,7 +127,7 @@ public class Luna {
      * 2: item2
      * </pre>
      */
-    public static void printTaskList() {
+    private static void printTaskList() {
         IntStream.range(0, taskList.size())
                  .mapToObj(i -> i + 1 + ": " + taskList.get(i))
                  .forEach(System.out::println);
@@ -138,7 +136,7 @@ public class Luna {
     /**
      * Marks the task specified by the user as completed.
      */
-    public static void markAsCompleted(String input) {
+    private static void markAsCompleted(String input) {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
@@ -148,7 +146,7 @@ public class Luna {
     /**
      * Marks the task specified by the user as not completed.
      */
-    public static void markAsNotCompleted(String input) {
+    private static void markAsNotCompleted(String input) {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsNotCompleted();
@@ -160,7 +158,7 @@ public class Luna {
      *
      * @throws IllegalArgumentException if input is empty
      */
-    public static void addToDo(String input) throws IllegalArgumentException {
+    private static void addToDo(String input) {
         Task task = new ToDo(input);
         taskList.add(task);
         System.out.println("Added new todo:\n" + task);
@@ -171,7 +169,7 @@ public class Luna {
      *
      * @throws IllegalArgumentException if input is empty or invalid
      */
-    public static void addDeadline(String input) {
+    private static void addDeadline(String input) {
         String[] comp = input.split(" /by ", 2);
         if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
             throw new IllegalArgumentException("Invalid task format");
@@ -186,7 +184,7 @@ public class Luna {
      *
      * @throws IllegalArgumentException if input is empty or invalid
      */
-    public static void addEvent(String input) {
+    private static void addEvent(String input) {
         String[] comp = input.split(" /(from|to) ", 3);
         if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
             throw new IllegalArgumentException("Invalid task format");
@@ -199,7 +197,7 @@ public class Luna {
     /**
      * Deletes the task specified by the user.
      */
-    public static void deleteTask(String input) {
+    private static void deleteTask(String input) {
         int taskNumber = Integer.parseInt(input);
         Task task = taskList.remove(taskNumber - 1);
         System.out.println("Deleted task " + taskNumber + ":\n" + task);
