@@ -1,4 +1,9 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -8,8 +13,9 @@ public class Luna {
     private static final String NAME = "Luna";
     private static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
     private static final String BYE = "Bye. Hope to see you again soon!";
-    private static final String UNSUPPORTED = "Unsupported command: 'help' to list commands.";
-    private static final String INCOMPLETE = "Incomplete command: 'help' to list commands.";
+    private static final String HELP = "'help' to list commands.";
+    private static final String UNSUPPORTED = "Unsupported command: " + HELP;
+    private static final String INCOMPLETE = "Incomplete command: " + HELP;
 
     // I/O
     private static final Scanner scanner = new Scanner(System.in);
@@ -230,9 +236,9 @@ public class Luna {
 
         // Write to file
         PrintWriter pw = new PrintWriter(saveFile);
-        for (Task task : taskList) {
-            pw.println((task.isCompleted() ? 1 : 0) + " " + task.getCommandString());
-        }
+        taskList.stream()
+                .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
+                .forEach(pw::println);
         pw.close();
     }
 
