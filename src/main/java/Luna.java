@@ -59,10 +59,10 @@ public class Luna {
             return false;
         case LIST:
             printTaskList();
-            break;
+            return true;
         case HELP:
             System.out.println(Command.helpString());
-            break;
+            return true;
         }
 
         // Check complex commands have arugments
