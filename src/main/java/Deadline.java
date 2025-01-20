@@ -6,6 +6,13 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public String getCommandString() {
+        return "deadline " + getDescription() + " /by " + by;
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by + ")";

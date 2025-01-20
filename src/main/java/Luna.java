@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -12,6 +13,8 @@ public class Luna {
 
     // I/O
     private static final Scanner scanner = new Scanner(System.in);
+    private static final String saveFileName = "./data/_" + NAME.toLowerCase();
+    private static File saveFile = new File(saveFileName);
 
     // Data
     private static ArrayList<Task> taskList = new ArrayList<>();
@@ -22,7 +25,6 @@ public class Luna {
         while (interact()) {
         }
     }
-
 
     /**
      * Interacts with the user and returns whether the user wants to continue.
@@ -203,4 +205,51 @@ public class Luna {
         System.out.println("Deleted task " + taskNumber + ":\n" + task);
     }
 
+    /**
+     * Saves the current list of tasks to a file.
+     * <p>
+     * The file format is newline-separated, each line consisting of completion status and task
+     * description.
+     */
+    private static void saveTasksToFile() throws FileNotFoundException {
+        // Ensure directory exists
+        File dir = saveFile.getParentFile();
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        // Write to file
+        PrintWriter pw = new PrintWriter(saveFile);
+        for (Task task : taskList) {
+            pw.println((task.isCompleted() ? 1 : 0) + " " + task.getCommandString());
+        }
+        pw.close();
+    }
+
+    private static void loadTasksFromFile() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(saveFile));
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] comp = line.split(" ", 3);
+
+            // Task type
+            String type = comp[1];
+            String input = comp[2];
+            if (type.equals("todo")) {
+                addToDo(input);
+            } else if (type.equals("deadline")) {
+                addDeadline(input);
+            } else if (type.equals("event")) {
+                addEvent(input);
+            }
+
+            // Completion
+            boolean completed = Integer.parseInt(comp[0]) != 0;
+            if (completed) {
+                taskList.get(taskList.size() - 1)
+                        .markAsCompleted();
+            }
+        }
+        br.close();
+    }
 }
