@@ -22,6 +22,11 @@ public class Luna {
     public static void main(String[] args) {
         // Greet the user, interact until the user says bye
         System.out.println(GREETING);
+        try {
+            loadTasksFromFile();
+        } catch (IOException e) {
+            System.out.println("Unable to load tasks from file.");
+        }
         while (interact()) {
         }
     }
@@ -114,6 +119,11 @@ public class Luna {
                 System.out.println("Invalid task number: " + words[1]);
             }
             break;
+        }
+        try {
+            saveTasksToFile();
+        } catch (FileNotFoundException e) {
+            System.out.println("Failed to save tasks to file");
         }
         return true;
     }
@@ -229,6 +239,7 @@ public class Luna {
     private static void loadTasksFromFile() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(saveFile));
         String line;
+        System.out.println("Adding tasks from file...");
         while ((line = br.readLine()) != null) {
             String[] comp = line.split(" ", 3);
 
@@ -251,5 +262,6 @@ public class Luna {
             }
         }
         br.close();
+        System.out.println("Loaded tasks! 'list' to view all.");
     }
 }
