@@ -1,23 +1,27 @@
+import java.time.LocalDateTime;
+
 public class Event extends Task {
 
-    private final String from;
-    private final String to;
+    private final LocalDateTime from;
+    private final LocalDateTime to;
 
     public Event(String description, String from, String to) {
         super(description);
-        this.from = from;
-        this.to = to;
+        this.from = LocalDateTime.parse(from, inputDateTimeFormatter);
+        this.to = LocalDateTime.parse(to, inputDateTimeFormatter);
     }
 
     /**
      * @inheritDoc
      */
     public String getCommandString() {
-        return "event " + getDescription() + " /from " + from + " /to " + to;
+        return String.format("event %s /from %s /to %s", getDescription(),
+                from.format(inputDateTimeFormatter), to.format(inputDateTimeFormatter));
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        return String.format("[E]%s (from: %s to: %s)", super.toString(),
+                from.format(displayDateTimeFormatter), to.format(displayDateTimeFormatter));
     }
 }

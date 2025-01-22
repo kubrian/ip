@@ -1,12 +1,18 @@
 todo eat
-deadline sleep /by tonight
-event cry /from now /to dinner
+deadline sleep /by 2025/1/1
+deadline sleep /by 2025/1/1 1 pm
+deadline sleep /by 2025/1/1 1:00 pm
+event cry /from 2025/1/1 /to 2025/1/2
 list
 todo
 deadline
 event
 deadline no by
 event no from to
+delete 1
+delete 1
+delete 1
+delete 1
 delete 1
 list
 bye
