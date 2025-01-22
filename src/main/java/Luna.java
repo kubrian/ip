@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.stream.IntStream;
@@ -13,7 +14,7 @@ public class Luna {
     private static final String NAME = "Luna";
     private static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
     private static final String BYE = "Bye. Hope to see you again soon!";
-    private static final String HELP = "'help' to list commands.";
+    private static final String HELP = "'help' to list commands and syntax";
     private static final String UNSUPPORTED = "Unsupported command: " + HELP;
     private static final String INCOMPLETE = "Incomplete command: " + HELP;
 
@@ -82,50 +83,38 @@ public class Luna {
             return true;
         }
 
-        switch (command) {
-        case MARK:
-            try {
-                markAsCompleted(words[1]);
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                System.out.println("Invalid task number: " + words[1]);
+        // Complex commands
+        String taskNumOrDesc = words[1];
+        try {
+            switch (command) {
+            case MARK:
+                markAsCompleted(taskNumOrDesc);
+                break;
+            case UNMARK:
+                markAsNotCompleted(taskNumOrDesc);
+                break;
+            case DELETE:
+                deleteTask(taskNumOrDesc);
+                break;
+            case TODO:
+                addToDo(taskNumOrDesc);
+                break;
+            case DEADLINE:
+                addDeadline(taskNumOrDesc);
+                break;
+            case EVENT:
+                addEvent(taskNumOrDesc);
+                break;
             }
-            break;
-        case UNMARK:
-            try {
-                markAsNotCompleted(words[1]);
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                System.out.println("Invalid task number: " + words[1]);
-            }
-            break;
-        case TODO:
-            try {
-                addToDo(words[1]);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-            break;
-        case DEADLINE:
-            try {
-                addDeadline(words[1]);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-            break;
-        case EVENT:
-            try {
-                addEvent(words[1]);
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-            break;
-        case DELETE:
-            try {
-                deleteTask(words[1]);
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
-                System.out.println("Invalid task number: " + words[1]);
-            }
-            break;
+        } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            System.out.println("Invalid task number");
+            System.out.println(HELP);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            System.out.println(HELP);
         }
+
+        // Task list has changed
         try {
             saveTasksToFile();
         } catch (FileNotFoundException e) {
@@ -192,9 +181,13 @@ public class Luna {
         if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
             throw new IllegalArgumentException("Invalid task format");
         }
-        Task task = new Deadline(comp[0], comp[1]);
-        taskList.add(task);
-        System.out.println("Added new deadline:\n" + task);
+        try {
+            Task task = new Deadline(comp[0], comp[1]);
+            taskList.add(task);
+            System.out.println("Added new deadline:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
     }
 
     /**
@@ -207,9 +200,13 @@ public class Luna {
         if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
             throw new IllegalArgumentException("Invalid task format");
         }
-        Task task = new Event(comp[0], comp[1], comp[2]);
-        taskList.add(task);
-        System.out.println("Added new event:\n" + task);
+        try {
+            Task task = new Event(comp[0], comp[1], comp[2]);
+            taskList.add(task);
+            System.out.println("Added new event:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
     }
 
     /**

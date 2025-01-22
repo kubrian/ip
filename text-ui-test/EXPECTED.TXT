@@ -1,23 +1,37 @@
 Hello! I'm Luna!
 What can I do for you?
+Adding tasks from file...
+Loaded tasks! 'list' to view all.
 > Added new todo:
 [T][ ] eat
 > Added new deadline:
-[D][ ] sleep (by: tonight)
+[D][ ] sleep (by: 1 Jan 25 12:00 am)
+> Added new deadline:
+[D][ ] sleep (by: 1 Jan 25 1:00 pm)
+> Added new deadline:
+[D][ ] sleep (by: 1 Jan 25 1:00 pm)
 > Added new event:
-[E][ ] cry (from: now to: dinner)
+[E][ ] cry (from: 1 Jan 25 12:00 am to: 2 Jan 25 12:00 am)
 > 1: [T][ ] eat
-2: [D][ ] sleep (by: tonight)
-3: [E][ ] cry (from: now to: dinner)
-Incomplete command: Type 'help' for a list of commands.
-> Incomplete command: Type 'help' for a list of commands.
-> Incomplete command: Type 'help' for a list of commands.
-> Incomplete command: Type 'help' for a list of commands.
+2: [D][ ] sleep (by: 1 Jan 25 12:00 am)
+3: [D][ ] sleep (by: 1 Jan 25 1:00 pm)
+4: [D][ ] sleep (by: 1 Jan 25 1:00 pm)
+5: [E][ ] cry (from: 1 Jan 25 12:00 am to: 2 Jan 25 12:00 am)
+> Incomplete command: 'help' to list commands and syntax
+> Incomplete command: 'help' to list commands and syntax
+> Incomplete command: 'help' to list commands and syntax
 > Invalid task format
+'help' to list commands and syntax
 > Invalid task format
+'help' to list commands and syntax
 > Deleted task 1:
 [T][ ] eat
-> 1: [D][ ] sleep (by: tonight)
-2: [E][ ] cry (from: now to: dinner)
-Incomplete command: Type 'help' for a list of commands.
-> Bye. Hope to see you again soon!
+> Deleted task 1:
+[D][ ] sleep (by: 1 Jan 25 12:00 am)
+> Deleted task 1:
+[D][ ] sleep (by: 1 Jan 25 1:00 pm)
+> Deleted task 1:
+[D][ ] sleep (by: 1 Jan 25 1:00 pm)
+> Deleted task 1:
+[E][ ] cry (from: 1 Jan 25 12:00 am to: 2 Jan 25 12:00 am)
+> > Bye. Hope to see you again soon!
