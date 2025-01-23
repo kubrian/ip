@@ -3,7 +3,7 @@ import java.util.Scanner;
 /**
  * A simple text-based user interface.
  */
-public class UI {
+public class ConsoleUI {
     // Common name independent strings
     private static final String BYE = "Bye. Hope to see you again soon!";
 
@@ -14,11 +14,11 @@ public class UI {
     private final String GREETING;
 
     /**
-     * Create a new UI with the given name.
+     * Create a new ConsoleUI with the given name.
      *
      * @param name The name of the chatbot.
      */
-    public UI(String name) {
+    public ConsoleUI(String name) {
         this.GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?", name);
     }
 

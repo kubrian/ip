@@ -18,17 +18,17 @@ public class Luna {
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
     private static File saveFile = new File(saveFileName);
     // I/O
-    private UI ui;
+    private ConsoleUI consoleUi;
     // Data
     private ArrayList<Task> taskList;
 
-    public Luna(UI ui) {
-        this.ui = ui;
+    public Luna(ConsoleUI consoleUi) {
+        this.consoleUi = consoleUi;
         this.taskList = new ArrayList<>();
     }
 
     public static void main(String[] args) {
-        Luna bot = new Luna(new UI(Luna.NAME));
+        Luna bot = new Luna(new ConsoleUI(Luna.NAME));
         // bot.loadTasksFromFile();
         bot.greetUser();
         // bot.run();
@@ -37,27 +37,27 @@ public class Luna {
     }
 
     private void greetUser() {
-        ui.greetUser();
+        consoleUi.greetUser();
     }
 
     public void run() {
         try {
             loadTasksFromFile();
         } catch (IOException e) {
-            ui.printOutput("Unable to load tasks from file.");
+            consoleUi.printOutput("Unable to load tasks from file.");
         }
         while (interact()) {
         }
     }
 
     public void close() {
-        UI.close();
+        ConsoleUI.close();
     }
 
     private void loadTasksFromFile() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(saveFile));
         String line;
-        ui.printOutput("Adding tasks from file...");
+        consoleUi.printOutput("Adding tasks from file...");
         while ((line = br.readLine()) != null) {
             String[] comp = line.split(" ", 3);
 
@@ -80,7 +80,7 @@ public class Luna {
             }
         }
         br.close();
-        ui.printOutput("Loaded tasks! 'list' to view all.");
+        consoleUi.printOutput("Loaded tasks! 'list' to view all.");
     }
 
     /**
@@ -90,7 +90,7 @@ public class Luna {
      */
     private boolean interact() {
         // Read input
-        String input = ui.getInput();
+        String input = consoleUi.getInput();
         String words[] = input.split(" ", 2);
 
         // Ensure valid command
@@ -98,32 +98,32 @@ public class Luna {
         try {
             command = Command.valueOf(words[0].toUpperCase());
         } catch (IllegalArgumentException e) {
-            ui.printOutput(UNSUPPORTED);
+            consoleUi.printOutput(UNSUPPORTED);
             return true;
         }
 
         // Check simple commands have no further inputs
         if ((command == Command.BYE || command == Command.LIST || command == Command.HELP) && words.length != 1) {
-            ui.printOutput(UNSUPPORTED);
+            consoleUi.printOutput(UNSUPPORTED);
             return true;
         }
 
         // Simple commands
         switch (command) {
         case BYE:
-            ui.goodbye();
+            consoleUi.goodbye();
             return false;
         case LIST:
             printTaskList();
             return true;
         case HELP:
-            ui.printOutput(Command.helpString());
+            consoleUi.printOutput(Command.helpString());
             return true;
         }
 
         // Check complex commands have arugments
         if (words.length != 2) {
-            ui.printOutput(INCOMPLETE);
+            consoleUi.printOutput(INCOMPLETE);
             return true;
         }
 
@@ -151,18 +151,18 @@ public class Luna {
                 break;
             }
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            ui.printOutput("Invalid task number");
-            ui.printOutput(HELP);
+            consoleUi.printOutput("Invalid task number");
+            consoleUi.printOutput(HELP);
         } catch (IllegalArgumentException e) {
-            ui.printOutput(e.getMessage());
-            ui.printOutput(HELP);
+            consoleUi.printOutput(e.getMessage());
+            consoleUi.printOutput(HELP);
         }
 
         // Task list has changed
         try {
             saveTasksToFile();
         } catch (FileNotFoundException e) {
-            ui.printOutput("Failed to save tasks to file");
+            consoleUi.printOutput("Failed to save tasks to file");
         }
         return true;
     }
@@ -175,7 +175,7 @@ public class Luna {
     private void addToDo(String input) {
         Task task = new ToDo(input);
         taskList.add(task);
-        ui.printOutput("Added new todo:\n" + task);
+        consoleUi.printOutput("Added new todo:\n" + task);
     }
 
     /**
@@ -191,7 +191,7 @@ public class Luna {
         try {
             Task task = new Deadline(comp[0], comp[1]);
             taskList.add(task);
-            ui.printOutput("Added new deadline:\n" + task);
+            consoleUi.printOutput("Added new deadline:\n" + task);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid deadline format");
         }
@@ -210,7 +210,7 @@ public class Luna {
         try {
             Task task = new Event(comp[0], comp[1], comp[2]);
             taskList.add(task);
-            ui.printOutput("Added new event:\n" + task);
+            consoleUi.printOutput("Added new event:\n" + task);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid deadline format");
         }
@@ -230,7 +230,7 @@ public class Luna {
     private void printTaskList() {
         IntStream.range(0, taskList.size())
                  .mapToObj(i -> i + 1 + ": " + taskList.get(i))
-                 .forEach(ui::printOutput);
+                 .forEach(consoleUi::printOutput);
     }
 
     /**
@@ -240,7 +240,7 @@ public class Luna {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
-        ui.printOutput("Marked task " + taskNumber + " as completed");
+        consoleUi.printOutput("Marked task " + taskNumber + " as completed");
     }
 
     /**
@@ -250,7 +250,7 @@ public class Luna {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsNotCompleted();
-        ui.printOutput("Marked task " + taskNumber + " as not completed");
+        consoleUi.printOutput("Marked task " + taskNumber + " as not completed");
     }
 
     /**
@@ -259,7 +259,7 @@ public class Luna {
     private void deleteTask(String input) {
         int taskNumber = Integer.parseInt(input);
         Task task = taskList.remove(taskNumber - 1);
-        ui.printOutput("Deleted task " + taskNumber + ":\n" + task);
+        consoleUi.printOutput("Deleted task " + taskNumber + ":\n" + task);
     }
 
     /**
