@@ -6,36 +6,81 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.stream.IntStream;
 
 public class Luna {
     // Common strings
     private static final String NAME = "Luna";
-    private static final String GREETING = "Hello! I'm " + NAME + "!\nWhat can I do for you?";
-    private static final String BYE = "Bye. Hope to see you again soon!";
     private static final String HELP = "'help' to list commands and syntax";
     private static final String UNSUPPORTED = "Unsupported command: " + HELP;
     private static final String INCOMPLETE = "Incomplete command: " + HELP;
-
-    // I/O
-    private static final Scanner scanner = new Scanner(System.in);
+    // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
     private static File saveFile = new File(saveFileName);
-
+    // I/O
+    private UI ui;
     // Data
-    private static ArrayList<Task> taskList = new ArrayList<>();
+    private ArrayList<Task> taskList;
+
+    public Luna(UI ui) {
+        this.ui = ui;
+        this.taskList = new ArrayList<>();
+    }
 
     public static void main(String[] args) {
-        // Greet the user, interact until the user says bye
-        System.out.println(GREETING);
+        Luna bot = new Luna(new UI(Luna.NAME));
+        // bot.loadTasksFromFile();
+        bot.greetUser();
+        // bot.run();
+        bot.run();
+        bot.close();
+    }
+
+    private void greetUser() {
+        ui.greetUser();
+    }
+
+    public void run() {
         try {
             loadTasksFromFile();
         } catch (IOException e) {
-            System.out.println("Unable to load tasks from file.");
+            ui.printOutput("Unable to load tasks from file.");
         }
         while (interact()) {
         }
+    }
+
+    public void close() {
+        UI.close();
+    }
+
+    private void loadTasksFromFile() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(saveFile));
+        String line;
+        ui.printOutput("Adding tasks from file...");
+        while ((line = br.readLine()) != null) {
+            String[] comp = line.split(" ", 3);
+
+            // Task type
+            String type = comp[1];
+            String input = comp[2];
+            if (type.equals("todo")) {
+                addToDo(input);
+            } else if (type.equals("deadline")) {
+                addDeadline(input);
+            } else if (type.equals("event")) {
+                addEvent(input);
+            }
+
+            // Completion
+            boolean completed = Integer.parseInt(comp[0]) != 0;
+            if (completed) {
+                taskList.get(taskList.size() - 1)
+                        .markAsCompleted();
+            }
+        }
+        br.close();
+        ui.printOutput("Loaded tasks! 'list' to view all.");
     }
 
     /**
@@ -43,10 +88,9 @@ public class Luna {
      * <p>
      * Returns false if the user says bye, true otherwise.
      */
-    private static boolean interact() {
+    private boolean interact() {
         // Read input
-        System.out.print("> ");
-        String input = scanner.nextLine();
+        String input = ui.getInput();
         String words[] = input.split(" ", 2);
 
         // Ensure valid command
@@ -54,32 +98,32 @@ public class Luna {
         try {
             command = Command.valueOf(words[0].toUpperCase());
         } catch (IllegalArgumentException e) {
-            System.out.println(UNSUPPORTED);
+            ui.printOutput(UNSUPPORTED);
             return true;
         }
 
         // Check simple commands have no further inputs
         if ((command == Command.BYE || command == Command.LIST || command == Command.HELP) && words.length != 1) {
-            System.out.println(UNSUPPORTED);
+            ui.printOutput(UNSUPPORTED);
             return true;
         }
 
         // Simple commands
         switch (command) {
         case BYE:
-            System.out.println(BYE);
+            ui.goodbye();
             return false;
         case LIST:
             printTaskList();
             return true;
         case HELP:
-            System.out.println(Command.helpString());
+            ui.printOutput(Command.helpString());
             return true;
         }
 
         // Check complex commands have arugments
         if (words.length != 2) {
-            System.out.println(INCOMPLETE);
+            ui.printOutput(INCOMPLETE);
             return true;
         }
 
@@ -107,20 +151,69 @@ public class Luna {
                 break;
             }
         } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            System.out.println("Invalid task number");
-            System.out.println(HELP);
+            ui.printOutput("Invalid task number");
+            ui.printOutput(HELP);
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            System.out.println(HELP);
+            ui.printOutput(e.getMessage());
+            ui.printOutput(HELP);
         }
 
         // Task list has changed
         try {
             saveTasksToFile();
         } catch (FileNotFoundException e) {
-            System.out.println("Failed to save tasks to file");
+            ui.printOutput("Failed to save tasks to file");
         }
         return true;
+    }
+
+    /**
+     * Adds a new todo task.
+     *
+     * @throws IllegalArgumentException if input is empty
+     */
+    private void addToDo(String input) {
+        Task task = new ToDo(input);
+        taskList.add(task);
+        ui.printOutput("Added new todo:\n" + task);
+    }
+
+    /**
+     * Adds a new deadline task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    private void addDeadline(String input) {
+        String[] comp = input.split(" /by ", 2);
+        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
+        }
+        try {
+            Task task = new Deadline(comp[0], comp[1]);
+            taskList.add(task);
+            ui.printOutput("Added new deadline:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
+    }
+
+    /**
+     * Adds a new event task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    private void addEvent(String input) {
+        String[] comp = input.split(" /(from|to) ", 3);
+        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
+        }
+        try {
+            Task task = new Event(comp[0], comp[1], comp[2]);
+            taskList.add(task);
+            ui.printOutput("Added new event:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
     }
 
     /**
@@ -134,88 +227,39 @@ public class Luna {
      * 2: item2
      * </pre>
      */
-    private static void printTaskList() {
+    private void printTaskList() {
         IntStream.range(0, taskList.size())
                  .mapToObj(i -> i + 1 + ": " + taskList.get(i))
-                 .forEach(System.out::println);
+                 .forEach(ui::printOutput);
     }
 
     /**
      * Marks the task specified by the user as completed.
      */
-    private static void markAsCompleted(String input) {
+    private void markAsCompleted(String input) {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
-        System.out.println("Marked task " + taskNumber + " as completed");
+        ui.printOutput("Marked task " + taskNumber + " as completed");
     }
 
     /**
      * Marks the task specified by the user as not completed.
      */
-    private static void markAsNotCompleted(String input) {
+    private void markAsNotCompleted(String input) {
         int taskNumber = Integer.parseInt(input);
         taskList.get(taskNumber - 1)
                 .markAsNotCompleted();
-        System.out.println("Marked task " + taskNumber + " as not completed");
-    }
-
-    /**
-     * Adds a new todo task.
-     *
-     * @throws IllegalArgumentException if input is empty
-     */
-    private static void addToDo(String input) {
-        Task task = new ToDo(input);
-        taskList.add(task);
-        System.out.println("Added new todo:\n" + task);
-    }
-
-    /**
-     * Adds a new deadline task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private static void addDeadline(String input) {
-        String[] comp = input.split(" /by ", 2);
-        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            Task task = new Deadline(comp[0], comp[1]);
-            taskList.add(task);
-            System.out.println("Added new deadline:\n" + task);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
-    }
-
-    /**
-     * Adds a new event task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private static void addEvent(String input) {
-        String[] comp = input.split(" /(from|to) ", 3);
-        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            Task task = new Event(comp[0], comp[1], comp[2]);
-            taskList.add(task);
-            System.out.println("Added new event:\n" + task);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
+        ui.printOutput("Marked task " + taskNumber + " as not completed");
     }
 
     /**
      * Deletes the task specified by the user.
      */
-    private static void deleteTask(String input) {
+    private void deleteTask(String input) {
         int taskNumber = Integer.parseInt(input);
         Task task = taskList.remove(taskNumber - 1);
-        System.out.println("Deleted task " + taskNumber + ":\n" + task);
+        ui.printOutput("Deleted task " + taskNumber + ":\n" + task);
     }
 
     /**
@@ -224,7 +268,7 @@ public class Luna {
      * The file format is newline-separated, each line consisting of completion status and task
      * description.
      */
-    private static void saveTasksToFile() throws FileNotFoundException {
+    private void saveTasksToFile() throws FileNotFoundException {
         // Ensure directory exists
         File dir = saveFile.getParentFile();
         if (!dir.exists()) {
@@ -237,34 +281,5 @@ public class Luna {
                 .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
                 .forEach(pw::println);
         pw.close();
-    }
-
-    private static void loadTasksFromFile() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(saveFile));
-        String line;
-        System.out.println("Adding tasks from file...");
-        while ((line = br.readLine()) != null) {
-            String[] comp = line.split(" ", 3);
-
-            // Task type
-            String type = comp[1];
-            String input = comp[2];
-            if (type.equals("todo")) {
-                addToDo(input);
-            } else if (type.equals("deadline")) {
-                addDeadline(input);
-            } else if (type.equals("event")) {
-                addEvent(input);
-            }
-
-            // Completion
-            boolean completed = Integer.parseInt(comp[0]) != 0;
-            if (completed) {
-                taskList.get(taskList.size() - 1)
-                        .markAsCompleted();
-            }
-        }
-        br.close();
-        System.out.println("Loaded tasks! 'list' to view all.");
     }
 }

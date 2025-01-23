@@ -1,7 +1,6 @@
 Hello! I'm Luna!
 What can I do for you?
-Adding tasks from file...
-Loaded tasks! 'list' to view all.
+Unable to load tasks from file.
 > Added new todo:
 [T][ ] eat
 > Added new deadline:
