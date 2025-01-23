@@ -1,6 +1,6 @@
+Unable to load tasks from file.
 Hello! I'm Luna!
 What can I do for you?
-Unable to load tasks from file.
 > Added new todo:
 [T][ ] eat
 > Added new deadline:

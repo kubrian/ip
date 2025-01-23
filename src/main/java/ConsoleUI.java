@@ -4,22 +4,21 @@ import java.util.Scanner;
  * A simple text-based user interface.
  */
 public class ConsoleUI {
-    // Common name independent strings
-    private static final String BYE = "Bye. Hope to see you again soon!";
-
-    // User I/O
     private static final Scanner scanner = new Scanner(System.in);
 
-    // Common name dependent strings
+    private final String NAME;
     private final String GREETING;
+    private final String BYE;
 
     /**
      * Create a new ConsoleUI with the given name.
      *
      * @param name The name of the chatbot.
      */
-    public ConsoleUI(String name) {
-        this.GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?", name);
+    public ConsoleUI(String name, String greeting, String bye) {
+        this.NAME = name;
+        this.GREETING = greeting;
+        this.BYE = bye;
     }
 
     /**
@@ -41,19 +40,19 @@ public class ConsoleUI {
     }
 
     /**
+     * Print the greeting message.
+     */
+    public void greetUser() {
+        printOutput(GREETING);
+    }
+
+    /**
      * Print the given output to the user.
      *
      * @param output The output to be printed.
      */
     public void printOutput(String output) {
         System.out.println(output);
-    }
-
-    /**
-     * Print the greeting message.
-     */
-    public void greetUser() {
-        printOutput(GREETING);
     }
 
     /**

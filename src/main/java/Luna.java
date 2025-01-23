@@ -9,16 +9,22 @@ import java.util.ArrayList;
 import java.util.stream.IntStream;
 
 public class Luna {
-    // Common strings
+    // Common messages
     private static final String NAME = "Luna";
+    private static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?"
+            , NAME);
+    private static final String BYE = "Bye. Hope to see you again soon!";
     private static final String HELP = "'help' to list commands and syntax";
     private static final String UNSUPPORTED = "Unsupported command: " + HELP;
     private static final String INCOMPLETE = "Incomplete command: " + HELP;
+
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
     private static File saveFile = new File(saveFileName);
+
     // I/O
     private ConsoleUI consoleUi;
+
     // Data
     private ArrayList<Task> taskList;
 
@@ -28,12 +34,45 @@ public class Luna {
     }
 
     public static void main(String[] args) {
-        Luna bot = new Luna(new ConsoleUI(Luna.NAME));
-        // bot.loadTasksFromFile();
+        Luna bot = new Luna(new ConsoleUI(Luna.NAME, Luna.GREETING, Luna.BYE));
+        bot.loadTasksFromFile();
         bot.greetUser();
-        // bot.run();
         bot.run();
         bot.close();
+    }
+
+    private void loadTasksFromFile() {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(saveFile));
+            String line;
+            consoleUi.printOutput("Adding tasks from file...");
+            while ((line = br.readLine()) != null) {
+                String[] comp = line.split(" ", 3);
+
+                // Task type
+                String type = comp[1];
+                String input = comp[2];
+                if (type.equals("todo")) {
+                    addToDo(input);
+                } else if (type.equals("deadline")) {
+                    addDeadline(input);
+                } else if (type.equals("event")) {
+                    addEvent(input);
+                }
+
+                // Completion
+                boolean completed = Integer.parseInt(comp[0]) != 0;
+                if (completed) {
+                    taskList.get(taskList.size() - 1)
+                            .markAsCompleted();
+                }
+            }
+            br.close();
+            consoleUi.printOutput("Loaded tasks! 'list' to view all.");
+        } catch (IOException e) {
+            consoleUi.printOutput("Unable to load tasks from file.");
+            return;
+        }
     }
 
     private void greetUser() {
@@ -41,11 +80,6 @@ public class Luna {
     }
 
     public void run() {
-        try {
-            loadTasksFromFile();
-        } catch (IOException e) {
-            consoleUi.printOutput("Unable to load tasks from file.");
-        }
         while (interact()) {
         }
     }
@@ -54,33 +88,53 @@ public class Luna {
         ConsoleUI.close();
     }
 
-    private void loadTasksFromFile() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(saveFile));
-        String line;
-        consoleUi.printOutput("Adding tasks from file...");
-        while ((line = br.readLine()) != null) {
-            String[] comp = line.split(" ", 3);
+    /**
+     * Adds a new todo task.
+     *
+     * @throws IllegalArgumentException if input is empty
+     */
+    private void addToDo(String input) {
+        Task task = new ToDo(input);
+        taskList.add(task);
+        consoleUi.printOutput("Added new todo:\n" + task);
+    }
 
-            // Task type
-            String type = comp[1];
-            String input = comp[2];
-            if (type.equals("todo")) {
-                addToDo(input);
-            } else if (type.equals("deadline")) {
-                addDeadline(input);
-            } else if (type.equals("event")) {
-                addEvent(input);
-            }
-
-            // Completion
-            boolean completed = Integer.parseInt(comp[0]) != 0;
-            if (completed) {
-                taskList.get(taskList.size() - 1)
-                        .markAsCompleted();
-            }
+    /**
+     * Adds a new deadline task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    private void addDeadline(String input) {
+        String[] comp = input.split(" /by ", 2);
+        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
         }
-        br.close();
-        consoleUi.printOutput("Loaded tasks! 'list' to view all.");
+        try {
+            Task task = new Deadline(comp[0], comp[1]);
+            taskList.add(task);
+            consoleUi.printOutput("Added new deadline:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
+    }
+
+    /**
+     * Adds a new event task.
+     *
+     * @throws IllegalArgumentException if input is empty or invalid
+     */
+    private void addEvent(String input) {
+        String[] comp = input.split(" /(from|to) ", 3);
+        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
+            throw new IllegalArgumentException("Invalid task format");
+        }
+        try {
+            Task task = new Event(comp[0], comp[1], comp[2]);
+            taskList.add(task);
+            consoleUi.printOutput("Added new event:\n" + task);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid deadline format");
+        }
     }
 
     /**
@@ -165,55 +219,6 @@ public class Luna {
             consoleUi.printOutput("Failed to save tasks to file");
         }
         return true;
-    }
-
-    /**
-     * Adds a new todo task.
-     *
-     * @throws IllegalArgumentException if input is empty
-     */
-    private void addToDo(String input) {
-        Task task = new ToDo(input);
-        taskList.add(task);
-        consoleUi.printOutput("Added new todo:\n" + task);
-    }
-
-    /**
-     * Adds a new deadline task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private void addDeadline(String input) {
-        String[] comp = input.split(" /by ", 2);
-        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            Task task = new Deadline(comp[0], comp[1]);
-            taskList.add(task);
-            consoleUi.printOutput("Added new deadline:\n" + task);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
-    }
-
-    /**
-     * Adds a new event task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private void addEvent(String input) {
-        String[] comp = input.split(" /(from|to) ", 3);
-        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            Task task = new Event(comp[0], comp[1], comp[2]);
-            taskList.add(task);
-            consoleUi.printOutput("Added new event:\n" + task);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
     }
 
     /**
