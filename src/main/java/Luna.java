@@ -92,9 +92,7 @@ public class Luna {
             throw new IllegalArgumentException("Invalid task format");
         }
         try {
-            Task task = new Deadline(comp[0], comp[1]);
-            taskList.add(task);
-            consoleUi.printOutput("Added new deadline:\n" + task);
+            new DeadlineCommand(comp[0], comp[1]).execute(consoleUi, null, taskList);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid deadline format");
         }
@@ -111,9 +109,7 @@ public class Luna {
             throw new IllegalArgumentException("Invalid task format");
         }
         try {
-            Task task = new Event(comp[0], comp[1], comp[2]);
-            taskList.add(task);
-            consoleUi.printOutput("Added new event:\n" + task);
+            new EventCommand(comp[0], comp[1], comp[2]).execute(consoleUi, null, taskList);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid deadline format");
         }
