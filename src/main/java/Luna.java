@@ -10,13 +10,13 @@ import java.util.stream.IntStream;
 
 public class Luna {
     // Common messages
-    private static final String NAME = "Luna";
-    private static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?"
+    public static final String NAME = "Luna";
+    public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?"
             , NAME);
-    private static final String BYE = "Bye. Hope to see you again soon!";
-    private static final String HELP = "'help' to list commands and syntax";
-    private static final String UNSUPPORTED = "Unsupported command: " + HELP;
-    private static final String INCOMPLETE = "Incomplete command: " + HELP;
+    public static final String BYE = "Bye. Hope to see you again soon!";
+    public static final String HELP = "'help' to list commands and syntax";
+    public static final String UNSUPPORTED = "Unsupported command: " + HELP;
+    public static final String INCOMPLETE = "Incomplete command: " + HELP;
 
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
@@ -28,13 +28,13 @@ public class Luna {
     // Data
     private final ArrayList<Task> taskList;
 
-    public Luna(ConsoleUI consoleUi) {
-        this.consoleUi = consoleUi;
+    public Luna() {
+        this.consoleUi = new ConsoleUI(NAME, GREETING, BYE, HELP, UNSUPPORTED, INCOMPLETE);
         this.taskList = new ArrayList<>();
     }
 
     public static void main(String[] args) {
-        Luna bot = new Luna(new ConsoleUI(Luna.NAME, Luna.GREETING, Luna.BYE));
+        Luna bot = new Luna();
         bot.loadTasksFromFile();
         bot.greetUser();
         bot.run();
@@ -82,7 +82,7 @@ public class Luna {
     }
 
     public void close() {
-        ConsoleUI.close();
+        consoleUi.close();
     }
 
     /**
@@ -159,14 +159,11 @@ public class Luna {
         // Simple commands
         switch (validCommand) {
         case BYE:
-            consoleUi.goodbye();
-            return false;
+            return new ByeCommand().execute(consoleUi, null, taskList);
         case LIST:
-            printTaskList();
-            return true;
+            return new ListCommand().execute(consoleUi, null, taskList);
         case HELP:
-            consoleUi.printOutput(ValidCommand.helpString);
-            return true;
+            return new HelpCommand().execute(consoleUi, null, taskList);
         }
         // Check complex commands have arugments
         if (words.length != 2) {
