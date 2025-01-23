@@ -38,7 +38,6 @@ public class Luna {
         bot.loadTasksFromFile();
         bot.greetUser();
         bot.run();
-        bot.close();
     }
 
     private void loadTasksFromFile() {
@@ -79,9 +78,6 @@ public class Luna {
     public void run() {
         while (interact()) {
         }
-    }
-
-    public void close() {
         consoleUi.close();
     }
 
@@ -164,14 +160,11 @@ public class Luna {
         try {
             switch (validCommand) {
             case MARK:
-                markAsCompleted(taskNumOrDesc);
-                break;
+                return new MarkCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
             case UNMARK:
-                markAsNotCompleted(taskNumOrDesc);
-                break;
+                return new UnmarkCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
             case DELETE:
-                deleteTask(taskNumOrDesc);
-                break;
+                return new DeleteCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
             case TODO:
                 return new TodoCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
             case DEADLINE:
@@ -195,35 +188,6 @@ public class Luna {
             consoleUi.printOutput("Failed to save tasks to file");
         }
         return true;
-    }
-
-    /**
-     * Marks the task specified by the user as completed.
-     */
-    private void markAsCompleted(String input) {
-        int taskNumber = Integer.parseInt(input);
-        taskList.get(taskNumber - 1)
-                .markAsCompleted();
-        consoleUi.printOutput("Marked task " + taskNumber + " as completed");
-    }
-
-    /**
-     * Marks the task specified by the user as not completed.
-     */
-    private void markAsNotCompleted(String input) {
-        int taskNumber = Integer.parseInt(input);
-        taskList.get(taskNumber - 1)
-                .markAsNotCompleted();
-        consoleUi.printOutput("Marked task " + taskNumber + " as not completed");
-    }
-
-    /**
-     * Deletes the task specified by the user.
-     */
-    private void deleteTask(String input) {
-        int taskNumber = Integer.parseInt(input);
-        Task task = taskList.remove(taskNumber - 1);
-        consoleUi.printOutput("Deleted task " + taskNumber + ":\n" + task);
     }
 
     /**
