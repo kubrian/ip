@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 public class Luna {
+
     // Common messages
     public static final String NAME = "Luna";
-    public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?"
-            , NAME);
+    public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?",
+            NAME);
     public static final String BYE = "Bye. Hope to see you again soon!";
     public static final String HELP = "'help' to list commands and syntax";
     public static final String UNSUPPORTED = "Unsupported command: " + HELP;
@@ -52,7 +52,7 @@ public class Luna {
                 String type = comp[1];
                 String input = comp[2];
                 if (type.equals("todo")) {
-                    addToDo(input);
+                    new TodoCommand(input).execute(consoleUi, null, taskList);
                 } else if (type.equals("deadline")) {
                     addDeadline(input);
                 } else if (type.equals("event")) {
@@ -83,17 +83,6 @@ public class Luna {
 
     public void close() {
         consoleUi.close();
-    }
-
-    /**
-     * Adds a new todo task.
-     *
-     * @throws IllegalArgumentException if input is empty
-     */
-    private void addToDo(String input) {
-        Task task = new ToDo(input);
-        taskList.add(task);
-        consoleUi.printOutput("Added new todo:\n" + task);
     }
 
     /**
@@ -184,8 +173,7 @@ public class Luna {
                 deleteTask(taskNumOrDesc);
                 break;
             case TODO:
-                addToDo(taskNumOrDesc);
-                break;
+                return new TodoCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
             case DEADLINE:
                 addDeadline(taskNumOrDesc);
                 break;
@@ -207,23 +195,6 @@ public class Luna {
             consoleUi.printOutput("Failed to save tasks to file");
         }
         return true;
-    }
-
-    /**
-     * Prints the current list of tasks.
-     * <p>
-     * Each item is numbered and the string is newline-separated.
-     * <p>
-     * Example output:
-     * <pre>
-     * 1: item1
-     * 2: item2
-     * </pre>
-     */
-    private void printTaskList() {
-        IntStream.range(0, taskList.size())
-                 .mapToObj(i -> i + 1 + ": " + taskList.get(i))
-                 .forEach(consoleUi::printOutput);
     }
 
     /**
@@ -274,4 +245,5 @@ public class Luna {
                 .forEach(pw::println);
         pw.close();
     }
+
 }
