@@ -20,13 +20,13 @@ public class Luna {
 
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
-    private static File saveFile = new File(saveFileName);
+    private static final File saveFile = new File(saveFileName);
 
     // I/O
-    private ConsoleUI consoleUi;
+    private final ConsoleUI consoleUi;
 
     // Data
-    private ArrayList<Task> taskList;
+    private final ArrayList<Task> taskList;
 
     public Luna(ConsoleUI consoleUi) {
         this.consoleUi = consoleUi;
@@ -48,7 +48,6 @@ public class Luna {
             consoleUi.printOutput("Adding tasks from file...");
             while ((line = br.readLine()) != null) {
                 String[] comp = line.split(" ", 3);
-
                 // Task type
                 String type = comp[1];
                 String input = comp[2];
@@ -59,7 +58,6 @@ public class Luna {
                 } else if (type.equals("event")) {
                     addEvent(input);
                 }
-
                 // Completion
                 boolean completed = Integer.parseInt(comp[0]) != 0;
                 if (completed) {
@@ -71,7 +69,6 @@ public class Luna {
             consoleUi.printOutput("Loaded tasks! 'list' to view all.");
         } catch (IOException e) {
             consoleUi.printOutput("Unable to load tasks from file.");
-            return;
         }
     }
 
@@ -145,25 +142,22 @@ public class Luna {
     private boolean interact() {
         // Read input
         String input = consoleUi.getInput();
-        String words[] = input.split(" ", 2);
-
+        String[] words = input.split(" ", 2);
         // Ensure valid command
-        Command command;
+        ValidCommand validCommand;
         try {
-            command = Command.valueOf(words[0].toUpperCase());
+            validCommand = ValidCommand.valueOf(words[0].toUpperCase());
         } catch (IllegalArgumentException e) {
             consoleUi.printOutput(UNSUPPORTED);
             return true;
         }
-
         // Check simple commands have no further inputs
-        if ((command == Command.BYE || command == Command.LIST || command == Command.HELP) && words.length != 1) {
+        if ((validCommand == ValidCommand.BYE || validCommand == ValidCommand.LIST || validCommand == ValidCommand.HELP) && words.length != 1) {
             consoleUi.printOutput(UNSUPPORTED);
             return true;
         }
-
         // Simple commands
-        switch (command) {
+        switch (validCommand) {
         case BYE:
             consoleUi.goodbye();
             return false;
@@ -171,20 +165,18 @@ public class Luna {
             printTaskList();
             return true;
         case HELP:
-            consoleUi.printOutput(Command.helpString());
+            consoleUi.printOutput(ValidCommand.helpString);
             return true;
         }
-
         // Check complex commands have arugments
         if (words.length != 2) {
             consoleUi.printOutput(INCOMPLETE);
             return true;
         }
-
         // Complex commands
         String taskNumOrDesc = words[1];
         try {
-            switch (command) {
+            switch (validCommand) {
             case MARK:
                 markAsCompleted(taskNumOrDesc);
                 break;
@@ -211,7 +203,6 @@ public class Luna {
             consoleUi.printOutput(e.getMessage());
             consoleUi.printOutput(HELP);
         }
-
         // Task list has changed
         try {
             saveTasksToFile();
@@ -279,7 +270,6 @@ public class Luna {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-
         // Write to file
         PrintWriter pw = new PrintWriter(saveFile);
         taskList.stream()
