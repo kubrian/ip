@@ -11,15 +11,21 @@ public class Luna {
 
     // Common messages
     public static final String NAME = "Luna";
+
     public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?",
             NAME);
+
     public static final String BYE = "Bye. Hope to see you again soon!";
+
     public static final String HELP = "'help' to list commands and syntax";
+
     public static final String UNSUPPORTED = "Unsupported command: " + HELP;
+
     public static final String INCOMPLETE = "Incomplete command: " + HELP;
 
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
+
     private static final File saveFile = new File(saveFileName);
 
     // I/O
@@ -105,7 +111,8 @@ public class Luna {
      */
     private void addEvent(String input) {
         String[] comp = input.split(" /(from|to) ", 3);
-        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2].length() == 0) {
+        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2]
+                .length() == 0) {
             throw new IllegalArgumentException("Invalid task format");
         }
         try {
@@ -123,66 +130,25 @@ public class Luna {
     private boolean interact() {
         // Read input
         String input = consoleUi.getInput();
-        String[] words = input.split(" ", 2);
-        // Ensure valid command
-        ValidCommand validCommand;
+        Command command;
         try {
-            validCommand = ValidCommand.valueOf(words[0].toUpperCase());
-        } catch (IllegalArgumentException e) {
-            consoleUi.printOutput(UNSUPPORTED);
-            return true;
-        }
-        // Check simple commands have no further inputs
-        if ((validCommand == ValidCommand.BYE || validCommand == ValidCommand.LIST || validCommand == ValidCommand.HELP) && words.length != 1) {
-            consoleUi.printOutput(UNSUPPORTED);
-            return true;
-        }
-        // Simple commands
-        switch (validCommand) {
-        case BYE:
-            return new ByeCommand().execute(consoleUi, null, taskList);
-        case LIST:
-            return new ListCommand().execute(consoleUi, null, taskList);
-        case HELP:
-            return new HelpCommand().execute(consoleUi, null, taskList);
-        }
-        // Check complex commands have arugments
-        if (words.length != 2) {
-            consoleUi.printOutput(INCOMPLETE);
-            return true;
-        }
-        // Complex commands
-        String taskNumOrDesc = words[1];
-        try {
-            switch (validCommand) {
-            case MARK:
-                return new MarkCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
-            case UNMARK:
-                return new UnmarkCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
-            case DELETE:
-                return new DeleteCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
-            case TODO:
-                return new TodoCommand(taskNumOrDesc).execute(consoleUi, null, taskList);
-            case DEADLINE:
-                addDeadline(taskNumOrDesc);
-                break;
-            case EVENT:
-                addEvent(taskNumOrDesc);
-                break;
-            }
-        } catch (NumberFormatException | IndexOutOfBoundsException e) {
-            consoleUi.printOutput("Invalid task number");
-            consoleUi.printOutput(HELP);
+            command = Parser.parseInput(input);
         } catch (IllegalArgumentException e) {
             consoleUi.printOutput(e.getMessage());
             consoleUi.printOutput(HELP);
+            return true;
         }
-        // Task list has changed
+
         try {
+            boolean cont = command.execute(consoleUi, null, taskList);
             saveTasksToFile();
+            return cont;
         } catch (FileNotFoundException e) {
             consoleUi.printOutput("Failed to save tasks to file");
+        } catch (IndexOutOfBoundsException e) {
+            consoleUi.printOutput("Invalid task number");
         }
+
         return true;
     }
 

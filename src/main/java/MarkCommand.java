@@ -5,7 +5,11 @@ public class MarkCommand implements Command {
     private final int taskNumber;
 
     public MarkCommand(String input) {
-        this.taskNumber = Integer.parseInt(input);
+        this(Integer.parseInt(input));
+    }
+
+    public MarkCommand(int taskNumber) {
+        this.taskNumber = taskNumber;
     }
 
     @Override

@@ -6,4 +6,5 @@ public class HelpCommand implements Command {
         consoleUi.showHelp();
         return true;
     }
+
 }

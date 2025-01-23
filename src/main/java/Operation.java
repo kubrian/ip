@@ -1,17 +1,17 @@
-public enum ValidCommand {
-    BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, HELP;
+public enum Operation {
+    BYE, HELP, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
 
     public static final String helpString = """
             Commands:
             bye
+            help
             list
             mark <number>
             unmark <number>
+            delete <number>
             todo <description>
             deadline <description> /by <datetime>
             event <description> /from <datetime> /to <datetime>
-            delete <number>
-            help
             
             Datetime format: YYYY/M/D[ h[:mm] a]
             The following examples are all acceptable

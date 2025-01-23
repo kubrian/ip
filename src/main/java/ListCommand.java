@@ -26,4 +26,5 @@ public class ListCommand implements Command {
                  .forEach(consoleUi::printOutput);
         return true;
     }
+
 }
