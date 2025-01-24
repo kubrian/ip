@@ -1,9 +1,12 @@
+package luna.ui;
+
 import java.util.Scanner;
 
 /**
  * A simple text-based user interface.
  */
 public class ConsoleUI {
+
     private final Scanner scanner;
 
     private final String NAME;
@@ -58,4 +61,5 @@ public class ConsoleUI {
     public void printIncorrectSyntax() {
         printOutput(INCORRECT);
     }
+
 }
