@@ -1,14 +1,13 @@
 package luna;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+
 import luna.command.Command;
 import luna.storage.Storage;
 import luna.task.Task;
 import luna.ui.ConsoleUI;
 import luna.ui.Parser;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class Luna {
 
@@ -18,12 +17,9 @@ public class Luna {
             NAME);
     public static final String BYE = "Bye. Hope to see you again soon!";
     public static final String HELP = "'help' to list commands and syntax";
-    public static final String UNSUPPORTED = "Unsupported command: " + HELP;
-    public static final String INCOMPLETE = "Incomplete command: " + HELP;
 
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
-    private static final File saveFile = new File(saveFileName);
 
     // I/O
     private final ConsoleUI consoleUi;
@@ -33,7 +29,7 @@ public class Luna {
     private final ArrayList<Task> taskList;
 
     public Luna(String saveFileName) {
-        this.consoleUi = new ConsoleUI(NAME, GREETING, BYE, HELP, UNSUPPORTED, INCOMPLETE);
+        this.consoleUi = new ConsoleUI(BYE);
         this.taskList = new ArrayList<>();
         this.storage = new Storage(saveFileName);
     }
@@ -45,7 +41,7 @@ public class Luna {
 
     public void run() {
         storage.loadTasksFromFile(consoleUi, taskList);
-        consoleUi.greetUser();
+        consoleUi.printOutput(GREETING);
         interactWithUser();
         consoleUi.close();
     }
