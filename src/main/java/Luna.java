@@ -4,28 +4,21 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class Luna {
 
     // Common messages
     public static final String NAME = "Luna";
-
     public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?",
             NAME);
-
     public static final String BYE = "Bye. Hope to see you again soon!";
-
     public static final String HELP = "'help' to list commands and syntax";
-
     public static final String UNSUPPORTED = "Unsupported command: " + HELP;
-
     public static final String INCOMPLETE = "Incomplete command: " + HELP;
 
     // Storage
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
-
     private static final File saveFile = new File(saveFileName);
 
     // I/O
@@ -50,28 +43,23 @@ public class Luna {
         try {
             BufferedReader br = new BufferedReader(new FileReader(saveFile));
             String line;
-            consoleUi.printOutput("Adding tasks from file...");
+            consoleUi.printOutput("Loading tasks from data file...");
             while ((line = br.readLine()) != null) {
-                String[] comp = line.split(" ", 3);
+                String[] comp = line.split(" ", 2);
                 // Task type
-                String type = comp[1];
-                String input = comp[2];
-                if (type.equals("todo")) {
-                    new TodoCommand(input).execute(consoleUi, null, taskList);
-                } else if (type.equals("deadline")) {
-                    addDeadline(input);
-                } else if (type.equals("event")) {
-                    addEvent(input);
-                }
+                Parser.parseInput(comp[1])
+                      .execute(consoleUi, null, taskList);
                 // Completion
-                boolean completed = Integer.parseInt(comp[0]) != 0;
-                if (completed) {
-                    taskList.get(taskList.size() - 1)
-                            .markAsCompleted();
+                if (comp[0].equals("1")) {
+                    // Mark last task as completed
+                    new MarkCommand(taskList.size()).execute(consoleUi, null, taskList);
                 }
             }
             br.close();
-            consoleUi.printOutput("Loaded tasks! 'list' to view all.");
+            consoleUi.printOutput("");
+            consoleUi.printOutput("Loaded " + taskList.size() + " tasks.");
+            new ListCommand().execute(consoleUi, null, taskList);
+            consoleUi.printOutput("");
         } catch (IOException e) {
             consoleUi.printOutput("Unable to load tasks from file.");
         }
@@ -85,41 +73,6 @@ public class Luna {
         while (interact()) {
         }
         consoleUi.close();
-    }
-
-    /**
-     * Adds a new deadline task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private void addDeadline(String input) {
-        String[] comp = input.split(" /by ", 2);
-        if (comp.length != 2 || comp[0].length() == 0 || comp[1].length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            new DeadlineCommand(comp[0], comp[1]).execute(consoleUi, null, taskList);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
-    }
-
-    /**
-     * Adds a new event task.
-     *
-     * @throws IllegalArgumentException if input is empty or invalid
-     */
-    private void addEvent(String input) {
-        String[] comp = input.split(" /(from|to) ", 3);
-        if (comp.length != 3 || comp[0].length() == 0 || comp[1].length() == 0 || comp[2]
-                .length() == 0) {
-            throw new IllegalArgumentException("Invalid task format");
-        }
-        try {
-            new EventCommand(comp[0], comp[1], comp[2]).execute(consoleUi, null, taskList);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException("Invalid deadline format");
-        }
     }
 
     /**

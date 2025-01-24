@@ -1,13 +1,26 @@
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 
+import static java.time.temporal.ChronoField.AMPM_OF_DAY;
+import static java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM;
+import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
+
 public class Parser {
+
+    private static final DateTimeFormatter inputDateTimeFormatter =
+            new DateTimeFormatterBuilder().appendPattern("yyyy/M/d[ h[:mm] a]")
+                                          .parseDefaulting(CLOCK_HOUR_OF_AMPM, 0)
+                                          .parseDefaulting(MINUTE_OF_HOUR, 0)
+                                          .parseDefaulting(AMPM_OF_DAY, 0)
+                                          .toFormatter();
 
     private Parser() {
         throw new RuntimeException("Parser is not instantiable");
     }
 
     public static Command parseInput(String input) throws IllegalArgumentException {
-        // 3 types of errors -> This simply means the string is invalid -> IllegalArgumentException
         String[] words = input.split(" ", 2);
 
         // Ensure requested operation is valid
@@ -18,12 +31,8 @@ public class Parser {
             throw new IllegalArgumentException(String.format("Unsupported command: %s", words[0]));
         }
 
-        String args;
-        try {
-            args = words[1];
-        } catch (ArrayIndexOutOfBoundsException e) {
-            args = "";
-        }
+        // Extract arguments
+        String args = words.length > 1 ? words[1] : "";
 
         // Further processing
         return switch (op) {
@@ -98,7 +107,8 @@ public class Parser {
                     + "arguments.");
         }
         try {
-            return new DeadlineCommand(comp[0], comp[1]);
+            LocalDateTime by = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
+            return new DeadlineCommand(comp[0], by);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid datetime format");
         }
@@ -111,7 +121,9 @@ public class Parser {
                     + "arguments.");
         }
         try {
-            return new EventCommand(comp[0], comp[1], comp[2]);
+            LocalDateTime from = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
+            LocalDateTime to = LocalDateTime.parse(comp[2], inputDateTimeFormatter);
+            return new EventCommand(comp[0], from, to);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid datetime format");
         }

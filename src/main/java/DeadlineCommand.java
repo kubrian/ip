@@ -1,11 +1,12 @@
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class DeadlineCommand implements Command {
 
     private final String description;
-    private final String by;
+    private final LocalDateTime by;
 
-    public DeadlineCommand(String description, String by) {
+    public DeadlineCommand(String description, LocalDateTime by) {
         this.description = description;
         this.by = by;
     }
