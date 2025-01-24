@@ -1,7 +1,6 @@
+Unable to load tasks from file.
 Hello! I'm Luna!
 What can I do for you?
-Adding tasks from file...
-Loaded tasks! 'list' to view all.
 > Added new todo:
 [T][ ] eat
 > Added new deadline:
@@ -17,12 +16,15 @@ Loaded tasks! 'list' to view all.
 3: [D][ ] sleep (by: 1 Jan 25 1:00 pm)
 4: [D][ ] sleep (by: 1 Jan 25 1:00 pm)
 5: [E][ ] cry (from: 1 Jan 25 12:00 am to: 2 Jan 25 12:00 am)
-> Incomplete command: 'help' to list commands and syntax
-> Incomplete command: 'help' to list commands and syntax
-> Incomplete command: 'help' to list commands and syntax
-> Invalid task format
+> 'todo' expects one argument.
 'help' to list commands and syntax
-> Invalid task format
+> 'deadline' expects description and deadline as arguments.
+'help' to list commands and syntax
+> 'event' expects description, from and to as arguments.
+'help' to list commands and syntax
+> 'deadline' expects description and deadline as arguments.
+'help' to list commands and syntax
+> 'event' expects description, from and to as arguments.
 'help' to list commands and syntax
 > Deleted task 1:
 [T][ ] eat

@@ -25,12 +25,12 @@ public abstract class Task {
         markAsNotCompleted();
     }
 
-    public void markAsCompleted() {
-        this.completed = true;
-    }
-
     public void markAsNotCompleted() {
         this.completed = false;
+    }
+
+    public void markAsCompleted() {
+        this.completed = true;
     }
 
     /**
