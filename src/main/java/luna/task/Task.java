@@ -1,3 +1,5 @@
+package luna.task;
+
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -9,6 +11,7 @@ import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
  * Represents a single task.
  */
 public abstract class Task {
+
     protected static final DateTimeFormatter inputDateTimeFormatter =
             new DateTimeFormatterBuilder().appendPattern("yyyy/M/d[ h[:mm] a]")
                                           .parseDefaulting(CLOCK_HOUR_OF_AMPM, 0)
@@ -56,4 +59,5 @@ public abstract class Task {
     public String toString() {
         return "[" + (completed ? "x" : " ") + "] " + description;
     }
+
 }

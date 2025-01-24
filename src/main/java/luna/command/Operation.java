@@ -1,3 +1,5 @@
+package luna.command;
+
 public enum Operation {
     BYE, HELP, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
 
