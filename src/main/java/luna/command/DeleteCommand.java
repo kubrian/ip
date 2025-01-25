@@ -10,10 +10,6 @@ public class DeleteCommand implements Command {
 
     private final int taskNumber;
 
-    public DeleteCommand(String input) {
-        this(Integer.parseInt(input));
-    }
-
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }

@@ -10,10 +10,6 @@ public class UnmarkCommand implements Command {
 
     private final int taskNumber;
 
-    public UnmarkCommand(String input) {
-        this(Integer.parseInt(input));
-    }
-
     public UnmarkCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
