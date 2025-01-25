@@ -5,12 +5,12 @@ import java.util.Scanner;
 /**
  * A simple text-based user interface.
  */
-public class ConsoleUI {
+public class ConsoleUi {
 
     private final Scanner scanner;
     private final String BYE;
 
-    public ConsoleUI(String bye) {
+    public ConsoleUi(String bye) {
         BYE = bye;
         scanner = new Scanner(System.in);
     }

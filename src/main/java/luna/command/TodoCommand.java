@@ -1,11 +1,11 @@
 package luna.command;
 
+import java.util.ArrayList;
+
 import luna.storage.Storage;
 import luna.task.Task;
 import luna.task.ToDo;
-import luna.ui.ConsoleUI;
-
-import java.util.ArrayList;
+import luna.ui.ConsoleUi;
 
 public class TodoCommand implements Command {
 
@@ -16,7 +16,7 @@ public class TodoCommand implements Command {
     }
 
     @Override
-    public boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         Task task = new ToDo(description);
         taskList.add(task);
         consoleUi.printOutput(String.format("Added new todo:\n%s", task));

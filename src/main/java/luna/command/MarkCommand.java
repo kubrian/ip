@@ -1,10 +1,10 @@
 package luna.command;
 
+import java.util.ArrayList;
+
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUI;
-
-import java.util.ArrayList;
+import luna.ui.ConsoleUi;
 
 public class MarkCommand implements Command {
 
@@ -19,7 +19,7 @@ public class MarkCommand implements Command {
     }
 
     @Override
-    public boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
         consoleUi.printOutput("Marked task " + taskNumber + " as completed");

@@ -1,14 +1,14 @@
 package luna.command;
 
+import java.util.ArrayList;
+
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUI;
-
-import java.util.ArrayList;
+import luna.ui.ConsoleUi;
 
 @FunctionalInterface
 public interface Command {
 
-    boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList);
+    boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList);
 
 }
