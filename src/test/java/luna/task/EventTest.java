@@ -1,6 +1,8 @@
 package luna.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +38,7 @@ public class EventTest {
         Event e1 = new Event("name1", d1, d2);
         e1.markAsCompleted();
         assertEquals("[E][x] name1 (from: 1 Feb 25 12:00 am to: 20 Nov 25 3:05 pm)", e1.toString());
+        assertTrue(e1.isCompleted());
     }
 
     @Test
@@ -46,6 +49,7 @@ public class EventTest {
         e1.markAsCompleted();
         e1.markAsNotCompleted();
         assertEquals("[E][ ] name1 (from: 1 Feb 25 12:00 am to: 20 Nov 25 3:05 pm)", e1.toString());
+        assertFalse(e1.isCompleted());
     }
 
 }

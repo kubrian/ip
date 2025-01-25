@@ -1,6 +1,8 @@
 package luna.task;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +31,7 @@ public class TodoTest {
         Todo t1 = new Todo("name1");
         t1.markAsCompleted();
         assertEquals("[T][x] name1", t1.toString());
+        assertTrue(t1.isCompleted());
     }
 
     @Test
@@ -37,6 +40,7 @@ public class TodoTest {
         t1.markAsCompleted();
         t1.markAsNotCompleted();
         assertEquals("[T][ ] name1", t1.toString());
+        assertFalse(t1.isCompleted());
     }
 
 }
