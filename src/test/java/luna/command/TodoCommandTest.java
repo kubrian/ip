@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import luna.storage.Storage;
 import luna.task.Task;
 import luna.task.Todo;
 import luna.ui.ConsoleUi;
@@ -18,7 +19,8 @@ public class TodoCommandTest {
 
     @Mock
     private ConsoleUi ui;
-
+    @Mock
+    private Storage storage;
     @Mock
     private ArrayList<Task> taskList;
 
@@ -29,7 +31,7 @@ public class TodoCommandTest {
 
     @Test
     void testExecute() {
-        new TodoCommand("Test").execute(ui, null, taskList);
+        new TodoCommand("Test").execute(ui, storage, taskList);
         verify(taskList).add(any(Todo.class));
     }
 

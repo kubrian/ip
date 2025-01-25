@@ -19,6 +19,7 @@ public class UnmarkCommand implements Command {
         taskList.get(taskNumber - 1)
                 .markAsNotCompleted();
         consoleUi.printOutput("Marked task " + taskNumber + " as not completed");
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

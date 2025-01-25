@@ -25,6 +25,7 @@ public class EventCommand implements Command {
         Task task = new Event(description, from, to);
         taskList.add(task);
         consoleUi.printOutput(String.format("Added new event:\n%s", task));
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

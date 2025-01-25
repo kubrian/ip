@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import luna.storage.Storage;
 import luna.task.Task;
 import luna.ui.ConsoleUi;
 
@@ -18,7 +19,8 @@ public class UnmarkCommandTest {
 
     @Mock
     private ConsoleUi ui;
-
+    @Mock
+    private Storage storage;
     @Mock
     private Task task;
 
@@ -34,8 +36,8 @@ public class UnmarkCommandTest {
 
     @Test
     void testExecute() {
-        new UnmarkCommand(1).execute(ui, null, taskList);
-        new UnmarkCommand(2).execute(ui, null, taskList);
+        new UnmarkCommand(1).execute(ui, storage, taskList);
+        new UnmarkCommand(2).execute(ui, storage, taskList);
         verify(task, times(2)).markAsNotCompleted();
         assertThrows(IndexOutOfBoundsException.class, () -> new UnmarkCommand(3).execute(ui, null,
                 taskList));
