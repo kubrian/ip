@@ -1,8 +1,14 @@
 package luna.command;
 
+/**
+ * Supported operations
+ */
 public enum Operation {
     BYE, HELP, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
 
+    /**
+     * The help string displaying available commands and their syntax.
+     */
     public static final String helpString = """
             Commands:
             - bye
