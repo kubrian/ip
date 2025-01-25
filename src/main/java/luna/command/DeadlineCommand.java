@@ -1,12 +1,12 @@
 package luna.command;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 import luna.storage.Storage;
 import luna.task.Deadline;
 import luna.task.Task;
-import luna.ui.ConsoleUI;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import luna.ui.ConsoleUi;
 
 public class DeadlineCommand implements Command {
 
@@ -19,7 +19,7 @@ public class DeadlineCommand implements Command {
     }
 
     @Override
-    public boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         Task task = new Deadline(description, by);
         taskList.add(task);
         consoleUi.printOutput("Added new deadline:\n" + task);

@@ -1,25 +1,21 @@
 package luna.command;
 
+import java.util.ArrayList;
+
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUI;
-
-import java.util.ArrayList;
+import luna.ui.ConsoleUi;
 
 public class DeleteCommand implements Command {
 
     private final int taskNumber;
-
-    public DeleteCommand(String input) {
-        this(Integer.parseInt(input));
-    }
 
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
     }
 
     @Override
-    public boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         Task task = taskList.remove(taskNumber - 1);
         consoleUi.printOutput("Deleted task " + taskNumber + ":\n" + task);
         return true;

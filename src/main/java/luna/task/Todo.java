@@ -3,9 +3,9 @@ package luna.task;
 /**
  * Represents a task that needs to be done
  */
-public class ToDo extends Task {
+public class Todo extends Task {
 
-    public ToDo(String description) {
+    public Todo(String description) {
         super(description);
     }
 

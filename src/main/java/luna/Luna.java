@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import luna.command.Command;
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUI;
+import luna.ui.ConsoleUi;
 import luna.ui.Parser;
 
 public class Luna {
@@ -22,14 +22,14 @@ public class Luna {
     private static final String saveFileName = "./data/_" + NAME.toLowerCase();
 
     // I/O
-    private final ConsoleUI consoleUi;
+    private final ConsoleUi consoleUi;
     private final Storage storage;
 
     // Data
     private final ArrayList<Task> taskList;
 
     public Luna(String saveFileName) {
-        this.consoleUi = new ConsoleUI(BYE);
+        this.consoleUi = new ConsoleUi(BYE);
         this.taskList = new ArrayList<>();
         this.storage = new Storage(saveFileName);
     }

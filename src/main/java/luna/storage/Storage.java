@@ -1,11 +1,5 @@
 package luna.storage;
 
-import luna.command.ListCommand;
-import luna.command.MarkCommand;
-import luna.task.Task;
-import luna.ui.ConsoleUI;
-import luna.ui.Parser;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import luna.command.ListCommand;
+import luna.command.MarkCommand;
+import luna.task.Task;
+import luna.ui.ConsoleUi;
+import luna.ui.Parser;
 
 /**
  *
@@ -27,7 +27,7 @@ public class Storage {
         this.saveFile = new File(saveFileName);
     }
 
-    public void loadTasksFromFile(ConsoleUI consoleUi, ArrayList<Task> taskList) {
+    public void loadTasksFromFile(ConsoleUi consoleUi, ArrayList<Task> taskList) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(saveFileName));
             String line;

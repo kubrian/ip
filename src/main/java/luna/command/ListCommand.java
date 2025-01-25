@@ -1,11 +1,11 @@
 package luna.command;
 
-import luna.storage.Storage;
-import luna.task.Task;
-import luna.ui.ConsoleUI;
-
 import java.util.ArrayList;
 import java.util.stream.IntStream;
+
+import luna.storage.Storage;
+import luna.task.Task;
+import luna.ui.ConsoleUi;
 
 public class ListCommand implements Command {
 
@@ -26,7 +26,7 @@ public class ListCommand implements Command {
      * @return Always returns true.
      * @inheritDoc
      */
-    public boolean execute(ConsoleUI consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         IntStream.range(0, taskList.size())
                  .mapToObj(i -> i + 1 + ": " + taskList.get(i))
                  .forEach(consoleUi::printOutput);
