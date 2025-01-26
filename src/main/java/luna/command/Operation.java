@@ -1,7 +1,7 @@
 package luna.command;
 
 public enum Operation {
-    BYE, HELP, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
+    BYE, HELP, LIST, MARK, UNMARK, DELETE, FIND, TODO, DEADLINE, EVENT;
 
     public static final String helpString = """
             Commands:
@@ -11,6 +11,7 @@ public enum Operation {
             - mark <number>
             - unmark <number>
             - delete <number>
+            - find <keyword>
             - todo <description>
             - deadline <description> /by <datetime>
             - event <description> /from <datetime> /to <datetime>

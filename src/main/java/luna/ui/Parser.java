@@ -1,25 +1,26 @@
 package luna.ui;
 
-import luna.command.ByeCommand;
-import luna.command.Command;
-import luna.command.DeadlineCommand;
-import luna.command.DeleteCommand;
-import luna.command.EventCommand;
-import luna.command.HelpCommand;
-import luna.command.ListCommand;
-import luna.command.MarkCommand;
-import luna.command.Operation;
-import luna.command.TodoCommand;
-import luna.command.UnmarkCommand;
+import static java.time.temporal.ChronoField.AMPM_OF_DAY;
+import static java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM;
+import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 
-import static java.time.temporal.ChronoField.AMPM_OF_DAY;
-import static java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
+import luna.command.ByeCommand;
+import luna.command.Command;
+import luna.command.DeadlineCommand;
+import luna.command.DeleteCommand;
+import luna.command.EventCommand;
+import luna.command.FindCommand;
+import luna.command.HelpCommand;
+import luna.command.ListCommand;
+import luna.command.MarkCommand;
+import luna.command.Operation;
+import luna.command.TodoCommand;
+import luna.command.UnmarkCommand;
 
 public class Parser {
 
@@ -56,6 +57,7 @@ public class Parser {
             case MARK -> parseMarkCommand(args);
             case UNMARK -> parseUnMarkCommand(args);
             case DELETE -> parseDeleteCommand(args);
+            case FIND -> parseFindCommand(args);
             case TODO -> parseTodoCommand(args);
             case DEADLINE -> parseDeadlineCommand(args);
             case EVENT -> parseEventCommand(args);
@@ -105,6 +107,13 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("'delete' expects one number as argument.");
         }
+    }
+
+    private static FindCommand parseFindCommand(String args) throws IllegalArgumentException {
+        if (args.isEmpty()) {
+            throw new IllegalArgumentException("'find' expects one argument.");
+        }
+        return new FindCommand(args);
     }
 
     private static TodoCommand parseTodoCommand(String args) throws IllegalArgumentException {
