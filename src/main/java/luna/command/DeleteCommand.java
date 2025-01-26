@@ -29,6 +29,7 @@ public class DeleteCommand implements Command {
     public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
         Task task = taskList.remove(taskNumber - 1);
         consoleUi.printOutput("Deleted task " + taskNumber + ":\n" + task);
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

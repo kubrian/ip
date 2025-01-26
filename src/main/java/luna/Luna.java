@@ -1,6 +1,5 @@
 package luna;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import luna.command.Command;
@@ -72,12 +71,9 @@ public class Luna {
 
             try {
                 boolean cont = command.execute(consoleUi, storage, taskList);
-                storage.saveTasksToFile(taskList);
                 if (!cont) {
                     break;
                 }
-            } catch (FileNotFoundException e) {
-                consoleUi.printOutput("Failed to save tasks to file");
             } catch (IndexOutOfBoundsException e) {
                 consoleUi.printOutput("Invalid task number");
             }

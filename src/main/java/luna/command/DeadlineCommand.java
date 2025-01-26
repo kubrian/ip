@@ -35,6 +35,7 @@ public class DeadlineCommand implements Command {
         Task task = new Deadline(description, by);
         taskList.add(task);
         consoleUi.printOutput("Added new deadline:\n" + task);
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

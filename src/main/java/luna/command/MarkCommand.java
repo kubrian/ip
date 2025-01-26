@@ -30,6 +30,7 @@ public class MarkCommand implements Command {
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
         consoleUi.printOutput("Marked task " + taskNumber + " as completed");
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

@@ -31,6 +31,7 @@ public class TodoCommand implements Command {
         Task task = new Todo(description);
         taskList.add(task);
         consoleUi.printOutput(String.format("Added new todo:\n%s", task));
+        storage.saveTasksToFile(consoleUi, taskList);
         return true;
     }
 

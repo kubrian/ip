@@ -50,13 +50,13 @@ public class Storage {
 
                 // Mark last task as completed
                 if (comp[0].equals("1")) {
-                    new MarkCommand(taskList.size()).execute(consoleUi, null, taskList);
+                    new MarkCommand(taskList.size()).execute(consoleUi, this, taskList);
                 }
             }
             br.close();
             consoleUi.printOutput("");
             consoleUi.printOutput("Loaded " + taskList.size() + " tasks.");
-            new ListCommand().execute(consoleUi, null, taskList);
+            new ListCommand().execute(consoleUi, this, taskList);
             consoleUi.printOutput("");
         } catch (IOException e) {
             consoleUi.printOutput("Unable to load tasks from file.");
@@ -68,7 +68,7 @@ public class Storage {
      *
      * @throws FileNotFoundException Thrown if the save file cannot be created.
      */
-    public void saveTasksToFile(ArrayList<Task> taskList) throws FileNotFoundException {
+    public void saveTasksToFile(ConsoleUi consoleUi, ArrayList<Task> taskList) {
         // Ensure directory exists
         File dir = saveFile.getParentFile();
         if (!dir.exists()) {
@@ -76,11 +76,15 @@ public class Storage {
         }
 
         // Write to file
-        PrintWriter pw = new PrintWriter(saveFile);
-        taskList.stream()
-                .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
-                .forEach(pw::println);
-        pw.close();
+        try {
+            PrintWriter pw = new PrintWriter(saveFile);
+            taskList.stream()
+                    .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
+                    .forEach(pw::println);
+            pw.close();
+        } catch (FileNotFoundException e) {
+            consoleUi.printOutput("Unable to save tasks to file.");
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import luna.storage.Storage;
 import luna.task.Task;
 import luna.ui.ConsoleUi;
 
@@ -17,6 +18,9 @@ public class DeleteCommandTest {
 
     @Mock
     private ConsoleUi ui;
+
+    @Mock
+    private Storage storage;
 
     @Mock
     private Task t1;
@@ -36,7 +40,7 @@ public class DeleteCommandTest {
 
     @Test
     void testExecute() {
-        new DeleteCommand(1).execute(ui, null, taskList);
+        new DeleteCommand(1).execute(ui, storage, taskList);
         assertEquals(t2, taskList.get(0));
         assertEquals(1, taskList.size());
         assertThrows(IndexOutOfBoundsException.class, () ->

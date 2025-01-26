@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import luna.storage.Storage;
 import luna.task.Deadline;
 import luna.task.Task;
 import luna.ui.ConsoleUi;
@@ -19,10 +20,10 @@ public class DeadlineCommandTest {
 
     @Mock
     private ConsoleUi ui;
-
+    @Mock
+    private Storage storage;
     @Mock
     private ArrayList<Task> taskList;
-
     @Mock
     private LocalDateTime by;
 
@@ -33,7 +34,7 @@ public class DeadlineCommandTest {
 
     @Test
     void testExecute() {
-        new DeadlineCommand("Test", by).execute(ui, null, taskList);
+        new DeadlineCommand("Test", by).execute(ui, storage, taskList);
         verify(taskList).add(any(Deadline.class));
     }
 
