@@ -4,7 +4,7 @@ package luna.command;
  * Supported operations
  */
 public enum Operation {
-    BYE, HELP, LIST, MARK, UNMARK, DELETE, TODO, DEADLINE, EVENT;
+    BYE, HELP, LIST, MARK, UNMARK, DELETE, FIND, TODO, DEADLINE, EVENT;
 
     /**
      * The help string displaying available commands and their syntax.
@@ -17,6 +17,7 @@ public enum Operation {
             - mark <number>
             - unmark <number>
             - delete <number>
+            - find <keyword>
             - todo <description>
             - deadline <description> /by <datetime>
             - event <description> /from <datetime> /to <datetime>
