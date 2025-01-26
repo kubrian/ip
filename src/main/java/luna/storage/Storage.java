@@ -15,21 +15,30 @@ import luna.ui.ConsoleUi;
 import luna.ui.Parser;
 
 /**
- *
+ * Stores and loads tasks from/to a file.
  */
 public class Storage {
 
-    private final String saveFileName;
     private final File saveFile;
 
+    /**
+     * Creates a new Storage object.
+     *
+     * @param saveFileName The path to the save file.
+     */
     public Storage(String saveFileName) {
-        this.saveFileName = saveFileName;
         this.saveFile = new File(saveFileName);
     }
 
+    /**
+     * Loads tasks from the save file.
+     *
+     * @param consoleUi The user interface for interacting with the user.
+     * @param taskList  The list of tasks to be saved.
+     */
     public void loadTasksFromFile(ConsoleUi consoleUi, ArrayList<Task> taskList) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(saveFileName));
+            BufferedReader br = new BufferedReader(new FileReader(saveFile));
             String line;
             consoleUi.printOutput("Loading tasks from data file...");
 
@@ -54,6 +63,11 @@ public class Storage {
         }
     }
 
+    /**
+     * Saves task list to the save file.
+     *
+     * @throws FileNotFoundException Thrown if the save file cannot be created.
+     */
     public void saveTasksToFile(ArrayList<Task> taskList) throws FileNotFoundException {
         // Ensure directory exists
         File dir = saveFile.getParentFile();

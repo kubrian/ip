@@ -1,5 +1,14 @@
 package luna.ui;
 
+import static java.time.temporal.ChronoField.AMPM_OF_DAY;
+import static java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM;
+import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+
 import luna.command.ByeCommand;
 import luna.command.Command;
 import luna.command.DeadlineCommand;
@@ -12,15 +21,9 @@ import luna.command.Operation;
 import luna.command.TodoCommand;
 import luna.command.UnmarkCommand;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.format.DateTimeParseException;
-
-import static java.time.temporal.ChronoField.AMPM_OF_DAY;
-import static java.time.temporal.ChronoField.CLOCK_HOUR_OF_AMPM;
-import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
-
+/**
+ * A class that parses user input into commands.
+ */
 public class Parser {
 
     private static final DateTimeFormatter inputDateTimeFormatter =
@@ -34,6 +37,11 @@ public class Parser {
         throw new RuntimeException("Parser is not instantiable");
     }
 
+    /**
+     * Returns the command corresponding to the given input string
+     *
+     * @throws IllegalArgumentException Thrown if the input is invalid
+     */
     public static Command parseInput(String input) throws IllegalArgumentException {
         String[] words = input.split(" ", 2);
 

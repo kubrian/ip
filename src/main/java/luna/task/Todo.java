@@ -9,9 +9,6 @@ public class Todo extends Task {
         super(description);
     }
 
-    /**
-     * @inheritDoc
-     */
     public String getCommandString() {
         return "todo " + getDescription();
     }

@@ -28,6 +28,11 @@ public class Luna {
     // Data
     private final ArrayList<Task> taskList;
 
+    /**
+     * Constructs a new chatbot instance.
+     *
+     * @param saveFileName The name of the file to use for storing tasks.
+     */
     public Luna(String saveFileName) {
         this.consoleUi = new ConsoleUi(BYE);
         this.taskList = new ArrayList<>();
@@ -39,6 +44,9 @@ public class Luna {
         bot.run();
     }
 
+    /**
+     * Runs the application.
+     */
     public void run() {
         storage.loadTasksFromFile(consoleUi, taskList);
         consoleUi.printOutput(GREETING);
@@ -47,9 +55,7 @@ public class Luna {
     }
 
     /**
-     * Interacts with the user and returns whether the user wants to continue.
-     * <p>
-     * Returns false if the user says bye, true otherwise.
+     * Interacts with the user until the user exits the application.
      */
     private void interactWithUser() {
         // Read input
