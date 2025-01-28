@@ -22,7 +22,7 @@ public class HelpCommandTest {
     @Test
     public void testExecute() {
         new HelpCommand().execute(ui, null, null);
-        verify(ui).printOutput(Operation.helpString);
+        verify(ui).printOutput(Operation.HELP_STRING);
     }
 
 }

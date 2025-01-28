@@ -25,13 +25,13 @@ public class Event extends Task {
 
     public String getCommandString() {
         return String.format("event %s /from %s /to %s", getDescription(),
-                from.format(inputDateTimeFormatter), to.format(inputDateTimeFormatter));
+                from.format(INPUT_DATE_TIME_FORMATTER), to.format(INPUT_DATE_TIME_FORMATTER));
     }
 
     @Override
     public String toString() {
         return String.format("[E]%s (from: %s to: %s)", super.toString(),
-                from.format(displayDateTimeFormatter), to.format(displayDateTimeFormatter));
+                from.format(DISPLAY_DATE_TIME_FORMATTER), to.format(DISPLAY_DATE_TIME_FORMATTER));
     }
 
 }

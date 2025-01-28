@@ -22,13 +22,13 @@ public class Deadline extends Task {
 
     public String getCommandString() {
         return String.format("deadline %s /by %s", getDescription(),
-                by.format(inputDateTimeFormatter));
+                by.format(INPUT_DATE_TIME_FORMATTER));
     }
 
     @Override
     public String toString() {
         return String.format("[D]%s (by: %s)", super.toString(),
-                by.format(displayDateTimeFormatter));
+                by.format(DISPLAY_DATE_TIME_FORMATTER));
     }
 
 }

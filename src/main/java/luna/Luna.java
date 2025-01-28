@@ -8,6 +8,9 @@ import luna.task.Task;
 import luna.ui.ConsoleUi;
 import luna.ui.Parser;
 
+/**
+ * Represents a chatbot.
+ */
 public class Luna {
 
     // Common messages

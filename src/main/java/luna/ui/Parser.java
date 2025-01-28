@@ -43,6 +43,7 @@ public class Parser {
      *
      * @throws IllegalArgumentException Thrown if the input is invalid
      */
+    @SuppressWarnings("checkstyle:Indentation")
     public static Command parseInput(String input) throws IllegalArgumentException {
         String[] words = input.split(" ", 2);
 
@@ -58,6 +59,7 @@ public class Parser {
         String args = words.length > 1 ? words[1] : "";
 
         // Further processing
+        // CHECKSTYLE.OFF: Indentation
         return switch (op) {
             case BYE -> parseByeCommand(args);
             case HELP -> parseHelpCommand(args);
@@ -70,6 +72,7 @@ public class Parser {
             case DEADLINE -> parseDeadlineCommand(args);
             case EVENT -> parseEventCommand(args);
         };
+        // CHECKSTYLE.ON
     }
 
     private static ByeCommand parseByeCommand(String args) throws IllegalArgumentException {
