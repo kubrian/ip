@@ -16,7 +16,7 @@ public class HelpCommand implements Command {
      */
     @Override
     public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
-        consoleUi.printOutput(Operation.helpString);
+        consoleUi.printOutput(Operation.HELP_STRING);
         return true;
     }
 

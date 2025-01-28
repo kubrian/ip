@@ -44,8 +44,7 @@ public class DeleteCommandTest {
         assertEquals(t2, taskList.get(0));
         assertEquals(1, taskList.size());
         assertThrows(IndexOutOfBoundsException.class, () ->
-                new DeleteCommand(2).execute(ui, null
-                        , taskList));
+                new DeleteCommand(2).execute(ui, null, taskList));
     }
 
 }

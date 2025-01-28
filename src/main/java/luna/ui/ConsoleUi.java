@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class ConsoleUi {
 
     private final Scanner scanner;
-    private final String BYE;
+    private final String bye;
 
     /**
      * Creates a new ConsoleUi.
@@ -16,7 +16,7 @@ public class ConsoleUi {
      * @param bye The message to print upon exit.
      */
     public ConsoleUi(String bye) {
-        BYE = bye;
+        this.bye = bye;
         scanner = new Scanner(System.in);
     }
 
@@ -39,7 +39,7 @@ public class ConsoleUi {
      * Prints the exit message to the user.
      */
     public void goodbye() {
-        printOutput(BYE);
+        printOutput(bye);
     }
 
     /**
