@@ -19,8 +19,10 @@ public class Main extends Application {
 
     private final Image userImage = new Image(this.getClass()
                                                   .getResourceAsStream("/images/user.png"));
-    private final Image dukeImage = new Image(this.getClass()
+    private final Image lunaImage = new Image(this.getClass()
                                                   .getResourceAsStream("/images/luna.png"));
+    private final Luna luna = new Luna("./data/_temp");
+
     private ScrollPane scrollPane;
     private VBox dialogContainer;
     private TextField userInput;
@@ -37,10 +39,6 @@ public class Main extends Application {
 
         userInput = new TextField();
         sendButton = new Button("Send");
-
-        DialogBox dialogBox = new DialogBox("Hello!", userImage);
-        dialogContainer.getChildren()
-                       .addAll(dialogBox);
 
         AnchorPane mainLayout = new AnchorPane();
         mainLayout.getChildren()
@@ -79,6 +77,32 @@ public class Main extends Application {
 
         AnchorPane.setLeftAnchor(userInput, 1.0);
         AnchorPane.setBottomAnchor(userInput, 1.0);
+
+        // Handling user input
+
+        sendButton.setOnMouseClicked((event) -> {
+            handleUserInput();
+        });
+        userInput.setOnAction((event) -> {
+            handleUserInput();
+        });
+
+        // Scroll down to the end every time dialogContainer's height changes.
+        dialogContainer.heightProperty()
+                       .addListener((observable) -> scrollPane.setVvalue(1.0));
+    }
+
+    /**
+     * Creates a dialog box containing user input, and appends it to
+     * the dialog container. Clears the user input after processing.
+     */
+    private void handleUserInput() {
+        String userText = userInput.getText();
+        String lunaText = luna.getResponse(userInput.getText());
+        dialogContainer.getChildren()
+                       .addAll(DialogBox.getUserDialog(userText, userImage),
+                               DialogBox.getLunaDialog(lunaText, lunaImage));
+        userInput.clear();
     }
 
 }
