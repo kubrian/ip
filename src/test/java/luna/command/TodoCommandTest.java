@@ -13,12 +13,9 @@ import org.mockito.MockitoAnnotations;
 import luna.storage.Storage;
 import luna.task.Task;
 import luna.task.Todo;
-import luna.ui.ConsoleUi;
 
 public class TodoCommandTest {
 
-    @Mock
-    private ConsoleUi ui;
     @Mock
     private Storage storage;
     @Mock
@@ -31,7 +28,7 @@ public class TodoCommandTest {
 
     @Test
     void testExecute() {
-        new TodoCommand("Test").execute(ui, storage, taskList);
+        new TodoCommand("Test").execute(storage, taskList);
         verify(taskList).add(any(Todo.class));
     }
 

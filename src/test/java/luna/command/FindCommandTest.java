@@ -1,6 +1,6 @@
 package luna.command;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -11,12 +11,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import luna.task.Task;
-import luna.ui.ConsoleUi;
 
 public class FindCommandTest {
 
-    @Mock
-    private ConsoleUi ui;
     @Mock
     private Task t1;
     @Mock
@@ -36,10 +33,8 @@ public class FindCommandTest {
         taskList.add(t1);
         taskList.add(t2);
 
-        new FindCommand("c").execute(ui, null, taskList);
-        verify(ui).printOutput("2: another text");
-
+        CommandResult result = new FindCommand("c").execute(null, taskList);
+        assertEquals("2: another text", result.getOutput());
     }
 
 }
-

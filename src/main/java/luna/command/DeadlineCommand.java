@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import luna.storage.Storage;
 import luna.task.Deadline;
 import luna.task.Task;
-import luna.ui.ConsoleUi;
 
 /**
  * Represents a command to add a deadline task.
@@ -28,15 +27,17 @@ public class DeadlineCommand implements Command {
     }
 
     /**
-     * Executes the command to add a deadline task.
+     * Executes the command to add a deadline task and returns the result.
      */
     @Override
-    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public CommandResult execute(Storage storage, ArrayList<Task> taskList) {
         Task task = new Deadline(description, by);
         taskList.add(task);
-        consoleUi.printOutput("Added new deadline:\n" + task);
-        storage.saveTasksToFile(consoleUi, taskList);
-        return true;
+        if (storage.saveTasksToFile(taskList)) {
+            return new CommandResult("Unable to save tasks to file", false);
+        } else {
+            return new CommandResult("Added new deadline:\n" + task, false);
+        }
     }
 
 }

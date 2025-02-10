@@ -3,6 +3,7 @@ package luna;
 import java.util.ArrayList;
 
 import luna.command.Command;
+import luna.command.CommandResult;
 import luna.storage.Storage;
 import luna.task.Task;
 import luna.ui.ConsoleUi;
@@ -36,7 +37,7 @@ public class Luna {
      * @param saveFileName The name of the file to use for storing tasks.
      */
     public Luna(String saveFileName) {
-        this.consoleUi = new ConsoleUi(BYE);
+        this.consoleUi = new ConsoleUi();
         this.taskList = new ArrayList<>();
         this.storage = new Storage(saveFileName);
     }
@@ -50,44 +51,42 @@ public class Luna {
      * Runs the application.
      */
     public void run() {
-        storage.loadTasksFromFile(consoleUi, taskList);
-        consoleUi.printOutput(GREETING);
-        interactWithUser();
-        consoleUi.close();
-    }
-
-    /**
-     * Interacts with the user until the user exits the application.
-     */
-    private void interactWithUser() {
-        // Read input
-        while (true) {
-            String input = consoleUi.getInput();
-            Command command;
-            try {
-                command = Parser.parseInput(input);
-            } catch (IllegalArgumentException e) {
-                consoleUi.printOutput(e.getMessage());
-                consoleUi.printOutput(HELP);
-                continue;
-            }
-
-            try {
-                boolean cont = command.execute(consoleUi, storage, taskList);
-                if (!cont) {
-                    break;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                consoleUi.printOutput("Invalid task number");
-            }
+        if (!storage.loadTasksFromFile(taskList)) {
+            consoleUi.printOutput("Unable to load tasks from file");
+        } else {
+            consoleUi.printOutput("Loaded " + taskList.size() + " tasks from file");
         }
+        consoleUi.printOutput(GREETING);
+        String input;
+        CommandResult result;
+        do {
+            input = consoleUi.getInput();
+            result = getResponse(input);
+            consoleUi.printOutput(result.getOutput());
+        } while (!result.isExit());
+        close();
     }
 
     /**
      * Generates a response for the user's chat message.
      */
-    public String getResponse(String input) {
-        return "Luna heard: " + input;
+    public CommandResult getResponse(String input) {
+        Command command;
+        try {
+            command = Parser.parseInput(input);
+        } catch (IllegalArgumentException e) {
+            return new CommandResult(e.getMessage() + "\n" + HELP, false);
+        }
+
+        try {
+            return command.execute(storage, taskList);
+        } catch (IndexOutOfBoundsException e) {
+            return new CommandResult("Invalid task number", false);
+        }
+    }
+
+    public void close() {
+        consoleUi.close();
     }
 
 }

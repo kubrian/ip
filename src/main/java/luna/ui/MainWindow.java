@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import luna.Luna;
+import luna.command.CommandResult;
 
 /**
  * Controller for the main GUI.
@@ -35,26 +36,30 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Injects the Duke instance
+     * Injects the Luna instance
      */
     public void setLuna(Luna l) {
         luna = l;
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and
-     * then appends them to
-     * the dialog container. Clears the user input after processing.
+     * Creates two dialog boxes, one echoing user input and the other containing Luna's reply and
+     * then appends them to the dialog container. Clears the user input after processing.
      */
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = luna.getResponse(input);
+
+        CommandResult response = luna.getResponse(input);
         dialogContainer.getChildren()
-                       .addAll(
-                               DialogBox.getUserDialog(input, userImage),
-                               DialogBox.getLunaDialog(response, dukeImage));
+                       .addAll(DialogBox.getUserDialog(input, userImage),
+                               DialogBox.getLunaDialog(response.getOutput(), dukeImage));
         userInput.clear();
+
+        if (response.isExit()) {
+            luna.close();
+            System.exit(0);
+        }
     }
 
 }

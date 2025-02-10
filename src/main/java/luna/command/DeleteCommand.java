@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUi;
 
 /**
  * Represents a command to delete a task.
@@ -23,14 +22,16 @@ public class DeleteCommand implements Command {
     }
 
     /**
-     * Executes the command to delete a task.
+     * Executes the command to delete a task and returns the result.
      */
     @Override
-    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public CommandResult execute(Storage storage, ArrayList<Task> taskList) {
         Task task = taskList.remove(taskNumber - 1);
-        consoleUi.printOutput("Deleted task " + taskNumber + ":\n" + task);
-        storage.saveTasksToFile(consoleUi, taskList);
-        return true;
+        if (storage.saveTasksToFile(taskList)) {
+            return new CommandResult("Deleted task " + taskNumber + ":\n" + task, false);
+        } else {
+            return new CommandResult("Unable to save tasks to file", false);
+        }
     }
 
 }

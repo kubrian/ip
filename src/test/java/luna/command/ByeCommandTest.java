@@ -1,18 +1,13 @@
 package luna.command;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import luna.ui.ConsoleUi;
-
 public class ByeCommandTest {
-
-    @Mock
-    private ConsoleUi ui;
 
     @BeforeEach
     void setUp() {
@@ -21,8 +16,9 @@ public class ByeCommandTest {
 
     @Test
     public void testExecute() {
-        new ByeCommand().execute(ui, null, null);
-        verify(ui).goodbye();
+        CommandResult result = new ByeCommand().execute(null, null);
+        assertTrue(result.isExit());
+        assertEquals(ByeCommand.BYE, result.getOutput());
     }
 
 }

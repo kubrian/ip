@@ -36,7 +36,7 @@ public class EventCommandTest {
 
     @Test
     void testExecute() {
-        new EventCommand("Test", from, to).execute(ui, storage, taskList);
+        new EventCommand("Test", from, to).execute(storage, taskList);
         verify(taskList).add(any(Event.class));
     }
 

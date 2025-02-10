@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import luna.storage.Storage;
 import luna.task.Task;
 import luna.task.Todo;
-import luna.ui.ConsoleUi;
 
 /**
  * Represents a command to add a todo task.
@@ -27,12 +26,14 @@ public class TodoCommand implements Command {
      * Executes the command to add a todo task.
      */
     @Override
-    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public CommandResult execute(Storage storage, ArrayList<Task> taskList) {
         Task task = new Todo(description);
         taskList.add(task);
-        consoleUi.printOutput(String.format("Added new todo:\n%s", task));
-        storage.saveTasksToFile(consoleUi, taskList);
-        return true;
+        if (storage.saveTasksToFile(taskList)) {
+            return new CommandResult("Added new todo:\n" + task, false);
+        } else {
+            return new CommandResult("Unable to save tasks to file", false);
+        }
     }
 
 }

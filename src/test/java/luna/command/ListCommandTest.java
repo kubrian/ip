@@ -1,6 +1,6 @@
 package luna.command;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -33,10 +33,8 @@ public class ListCommandTest {
         taskList.add(task);
         taskList.add(task);
 
-        new ListCommand().execute(ui, null, taskList);
-        verify(ui).printOutput("1: name1");
-        verify(ui).printOutput("2: name1");
-
+        CommandResult result = new ListCommand().execute(null, taskList);
+        assertEquals("1: name1\n2: name1", result.getOutput());
     }
 
 }

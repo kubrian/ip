@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUi;
 
 /**
  * Represents a command to mark a task as completed.
@@ -23,15 +22,18 @@ public class MarkCommand implements Command {
     }
 
     /**
-     * Executes the command to mark a task as completed.
+     * Executes the command to mark a task as completed and returns the result.
      */
     @Override
-    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
+    public CommandResult execute(Storage storage, ArrayList<Task> taskList) {
         taskList.get(taskNumber - 1)
                 .markAsCompleted();
-        consoleUi.printOutput("Marked task " + taskNumber + " as completed");
-        storage.saveTasksToFile(consoleUi, taskList);
-        return true;
+        if (storage.saveTasksToFile(taskList)) {
+            return new CommandResult("Marked task " + taskNumber + " as completed", false);
+        } else {
+            return new CommandResult("Unable to save tasks to file", false);
+
+        }
     }
 
 }
