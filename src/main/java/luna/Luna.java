@@ -42,6 +42,9 @@ public class Luna {
         this.storage = new Storage(saveFileName);
     }
 
+    /**
+     * Runs the application using the console instead of GUI
+     */
     public static void main(String[] args) {
         Luna bot = new Luna(saveFileName);
         bot.run();

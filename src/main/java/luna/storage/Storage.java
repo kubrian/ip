@@ -30,10 +30,10 @@ public class Storage {
     }
 
     /**
-     * Loads tasks into the task list from the save file and returns whether the load was
+     * Loads tasks into the given task list from the save file and returns if the loading was
      * successful.
      *
-     * @param taskList The location to store the loaded tasks.
+     * @param taskList The ArrayList to load the tasks into.
      */
     public boolean loadTasksFromFile(ArrayList<Task> taskList) {
         try {
@@ -60,7 +60,7 @@ public class Storage {
     }
 
     /**
-     * Saves task list to the save file.
+     * Saves the given task list to the save file.
      *
      * @return A boolean indicating whether the save was successful.
      */
