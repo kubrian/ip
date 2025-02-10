@@ -51,6 +51,10 @@ public class Luna {
      * Runs the application.
      */
     public void run() {
+        assert consoleUi != null;
+        assert storage != null;
+        assert taskList != null;
+
         if (!storage.loadTasksFromFile(taskList)) {
             consoleUi.printOutput("Unable to load tasks from file");
         } else {
@@ -79,6 +83,8 @@ public class Luna {
         }
 
         try {
+            assert storage != null;
+            assert taskList != null;
             return command.execute(storage, taskList);
         } catch (IndexOutOfBoundsException e) {
             return new CommandResult("Invalid task number", false);

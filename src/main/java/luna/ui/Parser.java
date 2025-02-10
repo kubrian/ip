@@ -43,7 +43,6 @@ public class Parser {
      *
      * @throws IllegalArgumentException Thrown if the input is invalid
      */
-    @SuppressWarnings("checkstyle:Indentation")
     public static Command parseInput(String input) throws IllegalArgumentException {
         String[] words = input.split(" ", 2);
 
@@ -72,7 +71,7 @@ public class Parser {
             case DEADLINE -> parseDeadlineCommand(args);
             case EVENT -> parseEventCommand(args);
         };
-        // CHECKSTYLE.ON
+        // CHECKSTYLE.ON: Indentation
     }
 
     private static ByeCommand parseByeCommand(String args) throws IllegalArgumentException {
@@ -138,7 +137,7 @@ public class Parser {
         String[] comp = args.split(" /by ", 2);
         if (comp.length != 2 || comp[0].isEmpty() || comp[1].isEmpty()) {
             throw new IllegalArgumentException("'deadline' expects description and deadline as "
-                    + "arguments.");
+                                               + "arguments.");
         }
         try {
             LocalDateTime by = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
@@ -152,7 +151,7 @@ public class Parser {
         String[] comp = args.split(" /(from|to) ", 3);
         if (comp.length != 3 || comp[0].isEmpty() || comp[1].isEmpty() || comp[2].isEmpty()) {
             throw new IllegalArgumentException("'event' expects description, from and to as "
-                    + "arguments.");
+                                               + "arguments.");
         }
         try {
             LocalDateTime from = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
