@@ -29,6 +29,9 @@ public class MainWindow extends AnchorPane {
     private Button sendButton;
     private Luna luna;
 
+    /**
+     * Performs initialization tasks
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty()
