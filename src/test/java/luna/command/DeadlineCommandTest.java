@@ -34,7 +34,7 @@ public class DeadlineCommandTest {
 
     @Test
     void testExecute() {
-        new DeadlineCommand("Test", by).execute(ui, storage, taskList);
+        new DeadlineCommand("Test", by).execute(storage, taskList);
         verify(taskList).add(any(Deadline.class));
     }
 

@@ -1,18 +1,12 @@
 package luna.command;
 
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import luna.ui.ConsoleUi;
-
 public class HelpCommandTest {
-
-    @Mock
-    private ConsoleUi ui;
 
     @BeforeEach
     void setUp() {
@@ -21,8 +15,8 @@ public class HelpCommandTest {
 
     @Test
     public void testExecute() {
-        new HelpCommand().execute(ui, null, null);
-        verify(ui).printOutput(Operation.HELP_STRING);
+        CommandResult result = new HelpCommand().execute(null, null);
+        assertEquals(Operation.HELP_STRING, result.getOutput());
     }
 
 }

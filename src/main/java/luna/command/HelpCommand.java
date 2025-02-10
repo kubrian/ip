@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import luna.storage.Storage;
 import luna.task.Task;
-import luna.ui.ConsoleUi;
 
 /**
  * Represents a command to display the help text.
@@ -12,12 +11,11 @@ import luna.ui.ConsoleUi;
 public class HelpCommand implements Command {
 
     /**
-     * Executes the command to display the help text.
+     * Executes the command to display the help text and returns the result.
      */
     @Override
-    public boolean execute(ConsoleUi consoleUi, Storage storage, ArrayList<Task> taskList) {
-        consoleUi.printOutput(Operation.HELP_STRING);
-        return true;
+    public CommandResult execute(Storage storage, ArrayList<Task> taskList) {
+        return new CommandResult(Operation.HELP_STRING, false);
     }
 
 }
