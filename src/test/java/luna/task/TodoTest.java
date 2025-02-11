@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 public class TodoTest {
 
     @Test
-    public void testGetCommandString() {
+    public void testGetStorageString() {
         Todo t1 = new Todo("name1");
-        assertEquals("todo name1", t1.getCommandString());
+        assertEquals("T | 0 | name1", t1.getStorageString());
 
         Todo t2 = new Todo("long name with spaces");
-        assertEquals("todo long name with spaces", t2.getCommandString());
+        assertEquals("T | 0 | long name with spaces", t2.getStorageString());
     }
 
     @Test

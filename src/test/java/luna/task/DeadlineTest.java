@@ -11,15 +11,14 @@ import org.junit.jupiter.api.Test;
 public class DeadlineTest {
 
     @Test
-    public void testGetCommandString() {
+    public void testGetStorageString() {
         LocalDateTime dt1 = LocalDateTime.of(2025, 2, 1, 0, 0);
         Deadline d1 = new Deadline("name1", dt1);
-        assertEquals("deadline name1 /by 2025/2/1 12:00 am", d1.getCommandString());
+        assertEquals("D | 0 | 2025/2/1 12:00 am | name1", d1.getStorageString());
 
-        LocalDateTime dt2 = LocalDateTime.of(2025, 11, 20, 15, 05);
+        LocalDateTime dt2 = LocalDateTime.of(2025, 11, 20, 15, 5);
         Deadline d2 = new Deadline("long name with spaces", dt2);
-        assertEquals("deadline long name with spaces /by 2025/11/20 3:05 pm",
-                d2.getCommandString());
+        assertEquals("D | 0 | 2025/11/20 3:05 pm | long name with spaces", d2.getStorageString());
     }
 
     @Test
@@ -28,7 +27,7 @@ public class DeadlineTest {
         Deadline d1 = new Deadline("name1", dt1);
         assertEquals("[D][ ] name1 (by: 1 Feb 25 12:00 am)", d1.toString());
 
-        LocalDateTime dt2 = LocalDateTime.of(2025, 11, 20, 15, 05);
+        LocalDateTime dt2 = LocalDateTime.of(2025, 11, 20, 15, 5);
         Deadline d2 = new Deadline("long name with spaces", dt2);
         assertEquals("[D][ ] long name with spaces (by: 20 Nov 25 3:05 pm)",
                 d2.toString());
