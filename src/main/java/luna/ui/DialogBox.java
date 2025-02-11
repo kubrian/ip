@@ -38,6 +38,8 @@ public class DialogBox extends HBox {
 
         dialog.setText(text);
         displayPicture.setImage(img);
+        displayPicture.setFitHeight(50);
+        displayPicture.setFitWidth(50);
     }
 
     public static DialogBox getUserDialog(String text, Image img) {

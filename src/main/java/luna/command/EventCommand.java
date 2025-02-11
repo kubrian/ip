@@ -37,9 +37,9 @@ public class EventCommand implements Command {
         Task task = new Event(description, from, to);
         taskList.add(task);
         if (storage.saveTasksToFile(taskList)) {
-            return new CommandResult("Unable to save tasks to file", false);
-        } else {
             return new CommandResult("Added new event:\n" + task, false);
+        } else {
+            return new CommandResult("Unable to save tasks to file", false);
         }
     }
 

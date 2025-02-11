@@ -34,9 +34,9 @@ public class DeadlineCommand implements Command {
         Task task = new Deadline(description, by);
         taskList.add(task);
         if (storage.saveTasksToFile(taskList)) {
-            return new CommandResult("Unable to save tasks to file", false);
-        } else {
             return new CommandResult("Added new deadline:\n" + task, false);
+        } else {
+            return new CommandResult("Unable to save tasks to file", false);
         }
     }
 
