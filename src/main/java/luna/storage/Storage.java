@@ -40,6 +40,7 @@ public class Storage {
      * @param taskList The ArrayList to load the tasks into.
      */
     public boolean loadTasksFromFile(ArrayList<Task> taskList) {
+        assert taskList != null;
         try {
             boolean isFullyLoaded = true;
             BufferedReader br = new BufferedReader(new FileReader(saveFile));
@@ -146,6 +147,7 @@ public class Storage {
         // Write to file
         try {
             PrintWriter pw = new PrintWriter(saveFile);
+            assert taskList != null;
             taskList.stream()
                     .map(task -> task.getStorageString())
                     .forEach(pw::println);
