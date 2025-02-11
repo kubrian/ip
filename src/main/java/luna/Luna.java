@@ -18,7 +18,6 @@ public class Luna {
     public static final String NAME = "Luna";
     public static final String GREETING = String.format("Hello! I'm %s!\nWhat can I do for you?",
             NAME);
-    public static final String BYE = "Bye. Hope to see you again soon!";
     public static final String HELP = "'help' to list commands and syntax";
 
     // Storage
@@ -42,6 +41,9 @@ public class Luna {
         this.storage = new Storage(saveFileName);
     }
 
+    /**
+     * Runs the application using the console instead of GUI
+     */
     public static void main(String[] args) {
         Luna bot = new Luna(saveFileName);
         bot.run();
@@ -55,11 +57,7 @@ public class Luna {
         assert storage != null;
         assert taskList != null;
 
-        if (!storage.loadTasksFromFile(taskList)) {
-            consoleUi.printOutput("Unable to load tasks from file");
-        } else {
-            consoleUi.printOutput("Loaded " + taskList.size() + " tasks from file");
-        }
+        consoleUi.printOutput(initialize());
         consoleUi.printOutput(GREETING);
         String input;
         CommandResult result;
@@ -69,6 +67,18 @@ public class Luna {
             consoleUi.printOutput(result.getOutput());
         } while (!result.isExit());
         close();
+    }
+
+    /**
+     * Loads tasks from a data file and returns a message indicating whether the loading was
+     * successful.
+     */
+    public String initialize() {
+        if (storage.loadTasksFromFile(taskList)) {
+            return "Loaded " + taskList.size() + " tasks from file";
+        } else {
+            return "Unable to load tasks from file";
+        }
     }
 
     /**

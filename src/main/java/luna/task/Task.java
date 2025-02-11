@@ -60,9 +60,9 @@ public abstract class Task {
     }
 
     /**
-     * Returns the command string needed to create this task.
+     * Returns the string needed to store this task.
      */
-    public abstract String getCommandString();
+    public abstract String getStorageString();
 
     @Override
     public String toString() {

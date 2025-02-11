@@ -9,8 +9,11 @@ public class Todo extends Task {
         super(description);
     }
 
-    public String getCommandString() {
-        return "todo " + getDescription();
+    @Override
+    public String getStorageString() {
+        return String.format("T | %s | %s",
+                isCompleted() ? 1 : 0,
+                getDescription());
     }
 
     @Override

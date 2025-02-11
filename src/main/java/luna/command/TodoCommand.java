@@ -23,7 +23,7 @@ public class TodoCommand implements Command {
     }
 
     /**
-     * Executes the command to add a todo task.
+     * Executes the command to add a todo task and returns the result.
      */
     @Override
     public CommandResult execute(Storage storage, ArrayList<Task> taskList) {

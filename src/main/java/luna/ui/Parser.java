@@ -27,7 +27,7 @@ import luna.command.UnmarkCommand;
  */
 public class Parser {
 
-    private static final DateTimeFormatter inputDateTimeFormatter =
+    public static final DateTimeFormatter INPUT_DATE_TIME_FORMATTER =
             new DateTimeFormatterBuilder().appendPattern("yyyy/M/d[ h[:mm] a]")
                                           .parseDefaulting(CLOCK_HOUR_OF_AMPM, 0)
                                           .parseDefaulting(MINUTE_OF_HOUR, 0)
@@ -140,7 +140,7 @@ public class Parser {
                                                + "arguments.");
         }
         try {
-            LocalDateTime by = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
+            LocalDateTime by = LocalDateTime.parse(comp[1], INPUT_DATE_TIME_FORMATTER);
             return new DeadlineCommand(comp[0], by);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid datetime format");
@@ -154,8 +154,8 @@ public class Parser {
                                                + "arguments.");
         }
         try {
-            LocalDateTime from = LocalDateTime.parse(comp[1], inputDateTimeFormatter);
-            LocalDateTime to = LocalDateTime.parse(comp[2], inputDateTimeFormatter);
+            LocalDateTime from = LocalDateTime.parse(comp[1], INPUT_DATE_TIME_FORMATTER);
+            LocalDateTime to = LocalDateTime.parse(comp[2], INPUT_DATE_TIME_FORMATTER);
             return new EventCommand(comp[0], from, to);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("Invalid datetime format");
