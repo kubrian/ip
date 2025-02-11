@@ -23,9 +23,14 @@ public class Event extends Task {
         this.to = to;
     }
 
-    public String getCommandString() {
-        return String.format("event %s /from %s /to %s", getDescription(),
-                from.format(INPUT_DATE_TIME_FORMATTER), to.format(INPUT_DATE_TIME_FORMATTER));
+    @Override
+    public String getStorageString() {
+        return String.format("E | %s | %s | %s | %s",
+                isCompleted() ? 1 : 0,
+                from.format(INPUT_DATE_TIME_FORMATTER),
+                to.format(INPUT_DATE_TIME_FORMATTER),
+                getDescription()
+        );
     }
 
     @Override

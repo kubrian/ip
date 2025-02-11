@@ -23,7 +23,7 @@ public class Main extends Application {
                                                   .getResourceAsStream("/images/user.png"));
     private final Image lunaImage = new Image(this.getClass()
                                                   .getResourceAsStream("/images/luna.png"));
-    private final Luna luna = new Luna("./data/_temp");
+    private final Luna luna = new Luna("./data/_luna");
 
     private ScrollPane scrollPane;
     private VBox dialogContainer;
@@ -33,6 +33,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        luna.initialize();
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();

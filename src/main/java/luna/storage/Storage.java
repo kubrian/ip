@@ -1,17 +1,21 @@
 package luna.storage;
 
+import static luna.ui.Parser.INPUT_DATE_TIME_FORMATTER;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
-import luna.command.ListCommand;
-import luna.command.MarkCommand;
+import luna.task.Deadline;
+import luna.task.Event;
 import luna.task.Task;
-import luna.ui.Parser;
+import luna.task.Todo;
 
 /**
  * Stores and loads tasks from/to a file.
@@ -37,26 +41,94 @@ public class Storage {
      */
     public boolean loadTasksFromFile(ArrayList<Task> taskList) {
         try {
+            boolean isFullyLoaded = true;
             BufferedReader br = new BufferedReader(new FileReader(saveFile));
             String line;
 
             while ((line = br.readLine()) != null) {
-                String[] comp = line.split(" ", 2);
-                // Task type
-                Parser.parseInput(comp[1])
-                      .execute(this, taskList);
-
-                // Mark last task as completed
-                if (comp[0].equals("1")) {
-                    new MarkCommand(taskList.size()).execute(this, taskList);
+                Task task = parseTask(line);
+                if (task != null) {
+                    taskList.add(task);
+                } else {
+                    isFullyLoaded = false;
                 }
             }
             br.close();
-            new ListCommand().execute(this, taskList);
-            return true;
+            return isFullyLoaded;
         } catch (IOException e) {
             return false;
         }
+    }
+
+    private Task parseTask(String line) {
+        String[] comp = line.split(" \\| ", 3);
+        // Ensure at least type | completion | details
+        if (comp.length != 3) {
+            return null;
+        }
+
+        // Result
+        Task task;
+        String[] args;
+
+        // By type
+        switch (comp[0]) {
+        case "T":
+            // Ensure non empty description
+            if (comp[2].isEmpty()) {
+                return null;
+            }
+            task = new Todo(comp[2]);
+            break;
+        case "D":
+            args = comp[2].split(" | ", 2);
+            // Ensure by | description
+            if (args.length != 2 || args[0].isEmpty() || args[1].isEmpty()) {
+                return null;
+            }
+            try {
+                LocalDateTime by = LocalDateTime.parse(args[0], INPUT_DATE_TIME_FORMATTER);
+                task = new Deadline(args[1], by);
+            } catch (DateTimeParseException e) {
+                return null;
+            }
+            break;
+        case "E":
+            args = comp[2].split(" | ", 3);
+            // Ensure from | to | description
+            if (args.length != 3 || args[0].isEmpty() || args[1].isEmpty() || args[2].isEmpty()) {
+                return null;
+            }
+            try {
+                LocalDateTime from = LocalDateTime.parse(args[0], INPUT_DATE_TIME_FORMATTER);
+                LocalDateTime to = LocalDateTime.parse(args[1], INPUT_DATE_TIME_FORMATTER);
+                task = new Event(args[2], from, to);
+            } catch (DateTimeParseException e) {
+                return null;
+            }
+            break;
+        default:
+            // Invalid type
+            return null;
+        }
+
+        // Ensure valid completion
+        boolean isCompleted;
+        if (comp[1].equals("1")) {
+            isCompleted = true;
+        } else if (comp[1].equals("0")) {
+            isCompleted = false;
+        } else {
+            return null;
+        }
+
+        assert task != null;
+
+        // Mark task as completed
+        if (isCompleted) {
+            task.markAsCompleted();
+        }
+        return task;
     }
 
     /**
@@ -75,7 +147,7 @@ public class Storage {
         try {
             PrintWriter pw = new PrintWriter(saveFile);
             taskList.stream()
-                    .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
+                    .map(task -> task.getStorageString())
                     .forEach(pw::println);
             pw.close();
             return true;

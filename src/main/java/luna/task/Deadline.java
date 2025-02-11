@@ -20,9 +20,12 @@ public class Deadline extends Task {
         this.by = by;
     }
 
-    public String getCommandString() {
-        return String.format("deadline %s /by %s", getDescription(),
-                by.format(INPUT_DATE_TIME_FORMATTER));
+    @Override
+    public String getStorageString() {
+        return String.format("D | %s | %s | %s",
+                isCompleted() ? 1 : 0,
+                by.format(INPUT_DATE_TIME_FORMATTER),
+                getDescription());
     }
 
     @Override
