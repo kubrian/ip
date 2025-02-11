@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import luna.command.ListCommand;
-import luna.command.MarkCommand;
 import luna.task.Task;
 import luna.ui.Parser;
 
@@ -36,6 +34,7 @@ public class Storage {
      * @param taskList The location to store the loaded tasks.
      */
     public boolean loadTasksFromFile(ArrayList<Task> taskList) {
+        assert taskList != null;
         try {
             BufferedReader br = new BufferedReader(new FileReader(saveFile));
             String line;
@@ -48,11 +47,11 @@ public class Storage {
 
                 // Mark last task as completed
                 if (comp[0].equals("1")) {
-                    new MarkCommand(taskList.size()).execute(this, taskList);
+                    taskList.get(taskList.size() - 1)
+                            .markAsCompleted();
                 }
             }
             br.close();
-            new ListCommand().execute(this, taskList);
             return true;
         } catch (IOException e) {
             return false;
@@ -74,6 +73,7 @@ public class Storage {
         // Write to file
         try {
             PrintWriter pw = new PrintWriter(saveFile);
+            assert taskList != null;
             taskList.stream()
                     .map(task -> (task.isCompleted() ? 1 : 0) + " " + task.getCommandString())
                     .forEach(pw::println);

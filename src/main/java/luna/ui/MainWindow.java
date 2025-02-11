@@ -51,8 +51,8 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert luna != null;
         String input = userInput.getText();
-
         CommandResult response = luna.getResponse(input);
         dialogContainer.getChildren()
                        .addAll(DialogBox.getUserDialog(input, userImage),
