@@ -15,11 +15,11 @@ public class EventTest {
         LocalDateTime d1 = LocalDateTime.of(2025, 2, 1, 0, 0);
         LocalDateTime d2 = LocalDateTime.of(2025, 11, 20, 15, 5);
         Event e1 = new Event("name1", d1, d2);
-        assertEquals("E | 0 | 2025/2/1 12:00 am | 2025/11/20 3:05 pm | name1",
+        assertEquals("E | 0 | 2025/2/1 12:00 AM | 2025/11/20 3:05 PM | name1",
                 e1.getStorageString());
 
         Event e2 = new Event("long name with spaces", d1, d2);
-        assertEquals("E | 0 | 2025/2/1 12:00 am | 2025/11/20 3:05 pm | long name with spaces",
+        assertEquals("E | 0 | 2025/2/1 12:00 AM | 2025/11/20 3:05 PM | long name with spaces",
                 e2.getStorageString());
     }
 
@@ -28,7 +28,7 @@ public class EventTest {
         LocalDateTime d1 = LocalDateTime.of(2025, 2, 1, 0, 0);
         LocalDateTime d2 = LocalDateTime.of(2025, 11, 20, 15, 5);
         Event e1 = new Event("name1", d1, d2);
-        assertEquals("[E][ ] name1 (from: 1 Feb 25 12:00 am to: 20 Nov 25 3:05 pm)", e1.toString());
+        assertEquals("[E][ ] name1 (from: 1 Feb 25 12:00 AM to: 20 Nov 25 3:05 PM)", e1.toString());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class EventTest {
         LocalDateTime d2 = LocalDateTime.of(2025, 11, 20, 15, 5);
         Event e1 = new Event("name1", d1, d2);
         e1.markAsCompleted();
-        assertEquals("[E][x] name1 (from: 1 Feb 25 12:00 am to: 20 Nov 25 3:05 pm)", e1.toString());
+        assertEquals("[E][x] name1 (from: 1 Feb 25 12:00 AM to: 20 Nov 25 3:05 PM)", e1.toString());
         assertTrue(e1.isCompleted());
     }
 
@@ -48,7 +48,7 @@ public class EventTest {
         Event e1 = new Event("name1", d1, d2);
         e1.markAsCompleted();
         e1.markAsNotCompleted();
-        assertEquals("[E][ ] name1 (from: 1 Feb 25 12:00 am to: 20 Nov 25 3:05 pm)", e1.toString());
+        assertEquals("[E][ ] name1 (from: 1 Feb 25 12:00 AM to: 20 Nov 25 3:05 PM)", e1.toString());
         assertFalse(e1.isCompleted());
     }
 

@@ -6,6 +6,7 @@ import static java.time.temporal.ChronoField.MINUTE_OF_HOUR;
 
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Locale;
 
 /**
  * Represents a single task.
@@ -17,9 +18,9 @@ public abstract class Task {
                                           .parseDefaulting(CLOCK_HOUR_OF_AMPM, 0)
                                           .parseDefaulting(MINUTE_OF_HOUR, 0)
                                           .parseDefaulting(AMPM_OF_DAY, 0)
-                                          .toFormatter();
+                                          .toFormatter(Locale.ENGLISH);
     protected static final DateTimeFormatter DISPLAY_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("d MMM yy h:mm a");
+            DateTimeFormatter.ofPattern("d MMM yy h:mm a", Locale.ENGLISH);
     private final String description;
     private boolean completed;
 
