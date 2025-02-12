@@ -27,8 +27,8 @@ public class Event extends Task {
     public String getStorageString() {
         return String.format("E | %s | %s | %s | %s",
                 isCompleted() ? 1 : 0,
-                from.format(INPUT_DATE_TIME_FORMATTER),
-                to.format(INPUT_DATE_TIME_FORMATTER),
+                from.format(DISPLAY_DATE_TIME_FORMATTER),
+                to.format(DISPLAY_DATE_TIME_FORMATTER),
                 getDescription()
         );
     }

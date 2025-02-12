@@ -47,7 +47,7 @@ Example:
 ```
 > deadline sleep /by 2025/1/1
 Added new deadline:
-[D][ ] sleep (by: 2025/1/1 12:00 am)
+[D][ ] sleep (by: 2025/1/1 12:00 AM)
 ```
 
 ## Adding an event: `event`
@@ -60,9 +60,9 @@ Format: `event <description> /from <from> /to <to>`, where `<from>` and
 Example:
 
 ```
-> event cs2103 final /from 2025/5/2 2:30 pm /to 2025/5/2 4:30 pm
+> event cs2103 final /from 2025/5/2 2:30 PM /to 2025/5/2 4:30 PM
 Added new event:
-[E][ ] cs2103 final (from: 2025/5/2 2:30 pm to: 2025/5/2 4:30 pm)
+[E][ ] cs2103 final (from: 2025/5/2 2:30 PM to: 2025/5/2 4:30 PM)
 ```
 
 ## Listing all tasks: `list`
@@ -76,8 +76,8 @@ Example:
 ```
 > list
 1: [T][ ] Take a nap
-2: [D][ ] sleep (by: 2025/1/1 12:00 am)
-3: [E][ ] cs2103 final (from: 2025/5/2 2:30 pm to: 2025/5/2 4:30 pm)
+2: [D][ ] sleep (by: 2025/1/1 12:00 AM)
+3: [E][ ] cs2103 final (from: 2025/5/2 2:30 PM to: 2025/5/2 4:30 PM)
 ```
 
 ## Marking a task as done: `mark`
@@ -124,7 +124,7 @@ Accepted format: `YYYY/M/D[ h[:mm] a]`, where `[]` denotes optional fields.
 The following three examples are all equivalent, highlighting the default values for the optional fields.
 
 ```
-2020/12/31 12:00 am
-2020/12/31 12 am
+2020/12/31 12:00 AM
+2020/12/31 12 AM
 2020/12/31
 ```

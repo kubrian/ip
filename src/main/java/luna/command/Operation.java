@@ -23,8 +23,8 @@ public enum Operation {
     private static final String DATETIME_FORMAT = """
             Datetime format: YYYY/M/D[ h[:mm] a]
             Example formats
-            2020/12/31 12:00 pm
-            2020/12/31 12 pm
+            2020/12/31 12:00 PM
+            2020/12/31 12 PM
             2020/12/31
             """;
 

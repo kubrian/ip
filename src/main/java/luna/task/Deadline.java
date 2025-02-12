@@ -24,7 +24,7 @@ public class Deadline extends Task {
     public String getStorageString() {
         return String.format("D | %s | %s | %s",
                 isCompleted() ? 1 : 0,
-                by.format(INPUT_DATE_TIME_FORMATTER),
+                by.format(DISPLAY_DATE_TIME_FORMATTER),
                 getDescription());
     }
 

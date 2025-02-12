@@ -26,10 +26,10 @@ public class ParserTest {
     @Test
     void testParseInput_deadline() {
         assertInstanceOf(DeadlineCommand.class, Parser.parseInput("deadline sleep /by 2025/1/1"));
-        assertInstanceOf(DeadlineCommand.class, Parser.parseInput("deadline sleep /by 2025/1/1 1 "
-                + "pm"));
-        assertInstanceOf(DeadlineCommand.class, Parser.parseInput("deadline sleep /by 2025/1/1 "
-                + "1:00 pm"));
+        assertInstanceOf(DeadlineCommand.class,
+                Parser.parseInput("deadline sleep /by 2025/1/1 1 PM"));
+        assertInstanceOf(DeadlineCommand.class,
+                Parser.parseInput("deadline sleep /by 2025/1/1 1:00 PM"));
         assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("deadline"));
         assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("deadline sleep"));
         assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("deadline sleep /by"));
@@ -37,14 +37,13 @@ public class ParserTest {
 
     @Test
     void testParseInput_event() {
-        assertInstanceOf(EventCommand.class, Parser.parseInput("event cry /from 2025/1/1 /to "
-                + "2025/1/2"));
-        assertInstanceOf(EventCommand.class, Parser.parseInput("event cry /from 2025/1/1 1 pm /to"
-                + " 2025/1/2 12:00 am"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parseInput("event cry /from 2025/1/1 /to 2025/1/2"));
+        assertInstanceOf(EventCommand.class,
+                Parser.parseInput("event cry /from 2025/1/1 1 PM /to 2025/1/2 12:00 AM"));
         assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("event"));
         assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("event cry"));
-        assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("event cry /from "
-                + "/to"));
+        assertThrows(IllegalArgumentException.class, () -> Parser.parseInput("event cry /from/to"));
     }
 
     @Test

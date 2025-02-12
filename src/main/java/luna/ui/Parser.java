@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 
 import luna.command.ByeCommand;
 import luna.command.Command;
@@ -32,7 +33,7 @@ public class Parser {
                                           .parseDefaulting(CLOCK_HOUR_OF_AMPM, 0)
                                           .parseDefaulting(MINUTE_OF_HOUR, 0)
                                           .parseDefaulting(AMPM_OF_DAY, 0)
-                                          .toFormatter();
+                                          .toFormatter(Locale.ENGLISH);
 
     private Parser() {
         throw new RuntimeException("Parser is not instantiable");
