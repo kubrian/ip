@@ -6,17 +6,17 @@ package luna.command;
 public class CommandResult {
 
     private final String output;
-    private final boolean exit;
+    private final boolean isExit;
 
     /**
      * Constructs a new CommandResult.
      *
      * @param output The output of executing the command.
-     * @param exit   Whether to exit the application.
+     * @param isExit Whether to exit the application.
      */
-    public CommandResult(String output, boolean exit) {
+    public CommandResult(String output, boolean isExit) {
         this.output = output;
-        this.exit = exit;
+        this.isExit = isExit;
     }
 
     /**
@@ -30,7 +30,7 @@ public class CommandResult {
      * Returns whether to exit the application.
      */
     public boolean isExit() {
-        return exit;
+        return isExit;
     }
 
 }
