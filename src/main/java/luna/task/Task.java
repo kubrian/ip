@@ -12,7 +12,7 @@ public abstract class Task {
             DateTimeFormatter.ofPattern("d MMM yy h:mm a", Locale.ENGLISH);
 
     private final String description;
-    private boolean completed;
+    private boolean isCompleted;
 
     /**
      * Creates a new task with the given description.
@@ -26,14 +26,14 @@ public abstract class Task {
      * Marks this task as not completed.
      */
     public void markAsNotCompleted() {
-        this.completed = false;
+        this.isCompleted = false;
     }
 
     /**
      * Marks this task as completed.
      */
     public void markAsCompleted() {
-        this.completed = true;
+        this.isCompleted = true;
     }
 
     /**
@@ -47,7 +47,7 @@ public abstract class Task {
      * Returns whether this task is completed.
      */
     public boolean isCompleted() {
-        return completed;
+        return isCompleted;
     }
 
     /**
@@ -57,7 +57,7 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return "[" + (completed ? "x" : " ") + "] " + description;
+        return "[" + (isCompleted ? "x" : " ") + "] " + description;
     }
 
 }
