@@ -1,6 +1,6 @@
 # Luna User Guide
 
-![Product screenshot](UI.png)
+![Product screenshot](../UI.png)
 
 Luna is a minimalist task management tool that allows users to organize todos, deadlines and events.
 It is a command-line interface (CLI) application run on a minimalist Graphical User Interface (GUI) on the user's computer.
